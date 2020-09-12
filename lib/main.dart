@@ -9,6 +9,7 @@ import 'package:english_words/english_words.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:junkaday/authentication/auth.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
+import 'package:junkaday/junkList.dart';
 import 'package:junkaday/junkLogger.dart';
 
 void main() => runApp(MyApp());
@@ -49,7 +50,7 @@ class _MainAppState extends State<MainApp> {
     if (_currentUser == null) {
       return IntroScreens(introScreenNumber: 1);
     } else {
-      return JunkLogger();
+      return JunkList();
     }
   }
 }
