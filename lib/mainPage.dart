@@ -27,13 +27,17 @@ class _MainPageState extends State<MainPage> {
   static List<Widget> _widgetOptions = <Widget>[
     JunkLogger(),
     JunkList(),
-    IntroScreens( introScreenNumber: 1)
+    IntroScreens( introScreenNumber: 1),
+    JunkList(),
+    JunkList(),
   ];
 
   static List<String> _widgetTitles = [
     'Logger',
     'List',
-    'Rewards'
+    'Rewards',
+    'Help',
+    'Friends'
   ];
 
   void _onItemTapped(int index) {
@@ -46,12 +50,14 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [IconButton(icon: Icon(Icons.cake_rounded), onPressed: ()=>{})],
         title: Text(_widgetTitles.elementAt(_selectedIndex)),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today_rounded),
@@ -64,6 +70,14 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.cake_rounded),
             title: Text('Rewards'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.help_rounded),
+            title: Text('Help'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group_rounded),
+            title: Text('Friends'),
           ),
         ],
         currentIndex: _selectedIndex,
