@@ -4,7 +4,6 @@ class JunkList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Junk List')),
         body: Column(
             children: [JunkListHelp(), Expanded(child: ScrollableJunkList())]));
   }

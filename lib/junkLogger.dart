@@ -14,17 +14,16 @@ class _JunkLoggerState extends State<JunkLogger> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Junk A Day')),
         body: Column(children: [
-          Text("Log Junk Here!",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Futura',
-                  color: Theme.of(context).primaryColor,
-                  decoration: TextDecoration.none)),
-          OutlineButton(
-              child: Text('Sign Out'),
-              onPressed: () => handleSignOutAndNavigate(context))
-        ]));
+      Text("Log Junk Here!",
+          style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'Futura',
+              color: Theme.of(context).primaryColor,
+              decoration: TextDecoration.none)),
+      OutlineButton(
+          child: Text('Sign Out'),
+          onPressed: () => handleSignOutAndNavigate(context))
+    ]));
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:junkaday/authentication/auth.dart';
 import 'package:junkaday/introScreens/introScreenDetails.dart';
 import 'package:junkaday/junkLogger.dart';
+import 'package:junkaday/mainPage.dart';
 
 class IntroScreens extends StatelessWidget {
   IntroScreens({Key key, this.introScreenNumber}) : super(key: key);
@@ -52,7 +53,7 @@ class IntroScreens extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) => nextIntroScreen == 0
-                ? JunkLogger()
+                ? MainPage()
                 : IntroScreens(introScreenNumber: nextIntroScreen)));
   }
 
