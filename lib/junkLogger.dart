@@ -46,13 +46,13 @@ class _JunkLoggerState extends State<JunkLogger> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                RaisedButton(color: Colors.redAccent,onPressed: _decrementJunkUnits, child: Text('-')),
+                RaisedButton(color: Theme.of(context).primaryColor, onPressed: _decrementJunkUnits, child: Text('-')),
                 Text(_junkUnits.toString()),
-                RaisedButton(color: Colors.greenAccent, onPressed: _incrementJunkUnits, child: Text('+')),
+                RaisedButton(color: Theme.of(context).primaryColor, onPressed: _incrementJunkUnits, child: Text('+')),
               ]),
           RaisedButton(color: Colors.teal[300], onPressed: _incrementJunkUnits, child: Text('Confirm')),
           RaisedButton(
-            color: Colors.cyan,
+            color: Theme.of(context).indicatorColor,
               onPressed: _incrementJunkUnits, child: Text('No Junk Today!')),
           // OutlineButton(
           //     child: Text('Sign Out'),

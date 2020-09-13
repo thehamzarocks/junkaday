@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:junkaday/authentication/auth.dart';
 import 'package:junkaday/introScreens/introScreenDetails.dart';
-import 'package:junkaday/junkLogger.dart';
 import 'package:junkaday/mainPage.dart';
 
 class IntroScreens extends StatelessWidget {

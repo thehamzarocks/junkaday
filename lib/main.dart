@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:junkaday/authentication/auth.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/mainPage.dart';
+import 'package:junkaday/user.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -31,6 +34,31 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   GoogleSignInAccount _currentUser;
 
+  Future<User> userDetailsFuture;
+
+  Future<User> _getUserDetails(email) async {
+    final getResponse =
+        await http.get('https://vet6qn.deta.dev/users/' + email);
+    if (getResponse.statusCode == 200) {
+      // return User(email: "dfjh@lsjdf.com", key: "sfew1ss0vspewrs", frownys: 30);
+      return User.fromJson(json.decode(getResponse.body));
+    } else {
+      final postResponse = await http.post(
+        'https://vet6qn.deta.dev/users/',
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email
+        })
+      );
+      if(postResponse.statusCode == 200) {
+        return User.fromJson(json.decode(postResponse.body));
+      }
+      throw Exception('Failed to get user details');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +66,9 @@ class _MainAppState extends State<MainApp> {
         .listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
+        userDetailsFuture = _getUserDetails(_currentUser.email);
       });
+
       if (_currentUser != null) {}
     });
     AuthService.googleSignIn.signInSilently();
@@ -49,7 +79,16 @@ class _MainAppState extends State<MainApp> {
     if (_currentUser == null) {
       return IntroScreens(introScreenNumber: 1);
     } else {
-      return MainPage();
+      return FutureBuilder<User>(
+          future: userDetailsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return MainPage();
+            } else if (snapshot.hasError) {
+              return Text('Error retrieving user details');
+            }
+            return CircularProgressIndicator();
+          });
     }
   }
 }
