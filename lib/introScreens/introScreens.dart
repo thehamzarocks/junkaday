@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:junkaday/authentication/auth.dart';
+import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/introScreens/introScreenDetails.dart';
 import 'package:junkaday/mainPage.dart';
+import 'package:provider/provider.dart';
 
 class IntroScreens extends StatelessWidget {
   IntroScreens({Key key, this.introScreenNumber}) : super(key: key);
@@ -57,10 +59,15 @@ class IntroScreens extends StatelessWidget {
   }
 
   void signInAndNavigate(BuildContext context) {
-    AuthService.handleSignIn().then((value) => Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => IntroScreens(introScreenNumber: 4))));
+    AuthService.handleSignIn().then((account) =>
+        AuthService.getUserDetails(account.email).then((value) {
+          Provider.of<UserModel>(context, listen: false)
+              .setUserModel(value.email, value.frownys, value.health);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IntroScreens(introScreenNumber: 4)));
+        }));
   }
 
   @override
@@ -90,11 +97,11 @@ class IntroScreens extends StatelessWidget {
                                   color: Theme.of(context).primaryColor,
                                   decoration: TextDecoration.none))))),
                       (introScreenNumber == 3
-                          ? GoogleSignInButton(
+                          ? (GoogleSignInButton(
                               onPressed: () =>
                                   signInAndNavigate(context) /* ... */,
                               darkMode: true, // default: false
-                            )
+                            ))
                           : SizedBox.shrink())
                     ]))));
   }

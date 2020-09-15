@@ -2,62 +2,50 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:junkaday/authentication/auth.dart';
+import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/mainPage.dart';
 import 'package:junkaday/user.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider<UserModel>(
+      create: (_) => UserModel(null, 10, 15),
+      child: MaterialApp(
         title: 'Junkaday',
         theme: ThemeData(primaryColor: Colors.cyan),
-        home: MainApp());
+        home: MainApp()));
+    // child: Consumer<UserModel>(
+    //     builder: (context, user, child) => MainApp(userDetailsProvider: user))));
   }
 }
 
 class MainApp extends StatefulWidget {
+  // MainApp({Key key, this.userDetailsProvider}) : super(key: key);
+
   @override
   _MainAppState createState() => _MainAppState();
 }
 
 class _MainAppState extends State<MainApp> {
   GoogleSignInAccount _currentUser;
+  // UserModel userDetailsProvider;
+
+  // _MainAppState(UserModel userDetailsProvider) {
+  //   this.userDetailsProvider = userDetailsProvider;
+  // }
 
   Future<User> userDetailsFuture;
-
-  Future<User> _getUserDetails(email) async {
-    final getResponse =
-        await http.get('https://vet6qn.deta.dev/users/' + email);
-    if (getResponse.statusCode == 200) {
-      // return User(email: "dfjh@lsjdf.com", key: "sfew1ss0vspewrs", frownys: 30);
-      return User.fromJson(json.decode(getResponse.body));
-    } else {
-      final postResponse = await http.post(
-        'https://vet6qn.deta.dev/users/',
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'email': email
-        })
-      );
-      if(postResponse.statusCode == 200) {
-        return User.fromJson(json.decode(postResponse.body));
-      }
-      throw Exception('Failed to get user details');
-    }
-  }
 
   @override
   void initState() {
@@ -66,10 +54,12 @@ class _MainAppState extends State<MainApp> {
         .listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
-        userDetailsFuture = _getUserDetails(_currentUser.email);
+        userDetailsFuture =
+            AuthService.getUserDetails(_currentUser.email);
       });
 
-      if (_currentUser != null) {}
+      if (_currentUser != null) {
+      }
     });
     AuthService.googleSignIn.signInSilently();
   }
@@ -83,6 +73,7 @@ class _MainAppState extends State<MainApp> {
           future: userDetailsFuture,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              Provider.of<UserModel>(context).setUserModel(snapshot.data.email, snapshot.data.frownys, snapshot.data.health);
               return MainPage();
             } else if (snapshot.hasError) {
               return Text('Error retrieving user details');

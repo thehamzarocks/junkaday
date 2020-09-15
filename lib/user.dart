@@ -7,13 +7,14 @@ class User {
   List<String> consumables;
   String lastUpdated;
 
-  User({this.key, this.email, this.frownys});
+  User({this.key, this.email, this.frownys, this.health});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       key: json['key'],
       email: json['email'],
       frownys: json['frownys'],
+      health: json['health'],
     );
   }
 }
