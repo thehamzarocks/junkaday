@@ -6,6 +6,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:junkaday/authentication/auth.dart';
 import 'package:junkaday/authentication/userModel.dart';
@@ -20,11 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<UserModel>(
-      create: (_) => UserModel(null, 10, 15),
-      child: MaterialApp(
-        title: 'Junkaday',
-        theme: ThemeData(primaryColor: Colors.cyan),
-        home: MainApp()));
+        create: (_) => UserModel(null, 10, 15),
+        child: MaterialApp(
+            title: 'Junkaday',
+            theme: ThemeData(primaryColor: Colors.cyan),
+            home: MainApp()));
     // child: Consumer<UserModel>(
     //     builder: (context, user, child) => MainApp(userDetailsProvider: user))));
   }
@@ -54,12 +55,10 @@ class _MainAppState extends State<MainApp> {
         .listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
-        userDetailsFuture =
-            AuthService.getUserDetails(_currentUser.email);
+        userDetailsFuture = AuthService.getUserDetails(_currentUser.email);
       });
 
-      if (_currentUser != null) {
-      }
+      if (_currentUser != null) {}
     });
     AuthService.googleSignIn.signInSilently();
   }
@@ -73,7 +72,12 @@ class _MainAppState extends State<MainApp> {
           future: userDetailsFuture,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              Provider.of<UserModel>(context).setUserModel(snapshot.data.email, snapshot.data.frownys, snapshot.data.health);
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                Provider.of<UserModel>(context).setUserModel(
+                    snapshot.data.email,
+                    snapshot.data.frownys,
+                    snapshot.data.health);
+              });
               return MainPage();
             } else if (snapshot.hasError) {
               return Text('Error retrieving user details');

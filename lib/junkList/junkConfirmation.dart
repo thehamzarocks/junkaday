@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class JunkConfirmation extends StatelessWidget {
-
   final String junkItem;
 
   JunkConfirmation({Key key, this.junkItem}) : super(key: key);
