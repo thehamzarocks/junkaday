@@ -31,13 +31,19 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
     "cookie": {"displayText": "A small pack of cookies", "dayCount": 0},
   };
 
-  Future<void> _showJunkConfirmationDialog(
-      {context: BuildContext, junkItem: String}) {
+  Future<void> _showJunkConfirmationDialog({
+    context: BuildContext,
+    junkItemKey: String,
+    junkItemDisplayText: String,
+  }) {
     return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) {
-          return JunkConfirmation(junkItem: junkItem);
+          return JunkConfirmation(
+              junkItemKey: junkItemKey,
+              junkItemDisplayText: junkItemDisplayText,
+              updateJunkLogCallBack: updateJunkList);
         });
   }
 
@@ -49,17 +55,24 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
     }
   }
 
+  void updateJunkList(DayJunkLog dayJunkLog) {
+    junkUnitsMap.forEach((key, value) {
+      value["dayCount"] = 0;
+    });
+    dayJunkLog.logs.forEach((specificJunkLog) {
+      junkUnitsMap[specificJunkLog.junkItem]["dayCount"]++;
+    });
+    setState(() {
+      junkUnitsMap = junkUnitsMap;
+    });
+  }
+
   // TODO: put in safety checks for when the key from the response is not present in the map
   @override
   void initState() {
     super.initState();
     getDayJunkLog().then((dayJunkLog) {
-      dayJunkLog.logs.forEach((specificJunkLog) {
-        junkUnitsMap[specificJunkLog.junkItem]["dayCount"]++;
-      });
-      setState(() {
-        junkUnitsMap = junkUnitsMap;
-      });
+      updateJunkList(dayJunkLog);
     });
   }
 
@@ -78,7 +91,9 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
           return ListTile(
             onTap: () => _showJunkConfirmationDialog(
                 context: context,
-                junkItem: junkUnitsMapEntryList[index].value["displayText"]),
+                junkItemKey: junkUnitsMapEntryList[index].key,
+                junkItemDisplayText:
+                    junkUnitsMapEntryList[index].value["displayText"]),
             title: Text(junkUnitsMapEntryList[index].value["displayText"]),
             trailing:
                 Text(junkUnitsMapEntryList[index].value["dayCount"].toString()),
