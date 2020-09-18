@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:junkaday/junkList/DayJunkLog.dart';
+import 'package:junkaday/authentication/userModel.dart';
+import 'package:junkaday/junkList/dayJunkLog.dart';
+import 'package:provider/provider.dart';
 
 class JunkConfirmation extends StatelessWidget {
   final String junkItemKey;
@@ -15,14 +17,18 @@ class JunkConfirmation extends StatelessWidget {
       this.updateJunkLogCallBack})
       : super(key: key);
 
-  Future<DayJunkLog> updateDayJunkLog() async {
+  Future<DayJunkLog> updateDayJunkLog(context) async {
+    final String email = Provider.of<UserModel>(context).getUserDetails().email;
+    if(email.isEmpty) {
+      return null;
+    }
     final updateResponse = await http.post(
         'https://inkfb5.deta.dev/specificJunkLogs',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          "user_email": "test1@test.com",
+          "user_email": email,
           "junkItem": junkItemKey
         }));
     if (updateResponse.statusCode == 200) {
@@ -52,7 +58,7 @@ class JunkConfirmation extends StatelessWidget {
         FlatButton(
           child: Text('Confirm'),
           onPressed: () {
-            updateDayJunkLog().then((response) {
+            updateDayJunkLog(context).then((response) {
               updateJunkLogCallBack(response);
             });
             Navigator.of(context).pop();

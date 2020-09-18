@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:junkaday/junkList/DayJunkLog.dart';
+import 'package:junkaday/authentication/userModel.dart';
+import 'package:junkaday/junkList/dayJunkLog.dart';
 import 'package:junkaday/junkList/junkConfirmation.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class ScrollableJunkList extends StatefulWidget {
   @override
@@ -23,6 +25,7 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
     "Two Jalebis",
     "Two Samosas"
   ];
+  bool initialized = false;
 
   Map<String, Map<String, dynamic>> junkUnitsMap = {
     "chips": {"displayText": "Small/Medium Bag of Chips", "dayCount": 0},
@@ -47,15 +50,21 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
         });
   }
 
-  Future<DayJunkLog> getDayJunkLog() async {
+  Future<DayJunkLog> getDayJunkLog(String email) async {
+    // if(email == null) {
+    //   return null;
+    // }
     final getResponse = await http
-        .get('https://inkfb5.deta.dev/dayJunkLog/currentDay/test1@test.com');
+        .get('https://inkfb5.deta.dev/dayJunkLog/currentDay/' + email);
     if (getResponse.statusCode == 200) {
       return DayJunkLog.fromJson(json.decode(getResponse.body));
     }
   }
 
   void updateJunkList(DayJunkLog dayJunkLog) {
+    if (dayJunkLog == null) {
+      return;
+    }
     junkUnitsMap.forEach((key, value) {
       value["dayCount"] = 0;
     });
@@ -64,22 +73,25 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
     });
     setState(() {
       junkUnitsMap = junkUnitsMap;
+      initialized = true;
     });
   }
 
-  // TODO: put in safety checks for when the key from the response is not present in the map
   @override
   void initState() {
     super.initState();
-    getDayJunkLog().then((dayJunkLog) {
-      updateJunkList(dayJunkLog);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     List<MapEntry<String, Map<String, dynamic>>> junkUnitsMapEntryList =
         junkUnitsMap.entries.toList();
+    final String email = Provider.of<UserModel>(context).getUserDetails().email;
+    if (!initialized && email != null) {
+      getDayJunkLog(email).then((dayJunkLog) {
+        updateJunkList(dayJunkLog);
+      });
+    }
     return (ListView.builder(
         padding: EdgeInsets.all(16.0),
         itemCount: junkUnitsMapEntryList.length * 2,
