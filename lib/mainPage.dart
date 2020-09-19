@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:junkaday/authentication/userModel.dart';
-import 'package:junkaday/frowny.dart';
 import 'package:junkaday/health.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/junkList/junkList.dart';
+import 'package:junkaday/mint.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -36,12 +36,21 @@ class _MainPageState extends State<MainPage> {
     return (Scaffold(
         appBar: AppBar(
           actions: [
+            Consumer<UserModel>(builder: (context, user, _) {
+              if (user.getUserDetails().isSpirit == true) {
+                return Icon(Icons.warning_rounded);
+              } else {
+                return SizedBox.shrink();
+              }
+            }),
+            Consumer<UserModel>(
+                builder: (context, user, _) => Health(
+                      health: user.getUserDetails().health,
+                      maxHealth: user.getUserDetails().maxHealth,
+                    )),
             Consumer<UserModel>(
                 builder: (context, user, _) =>
-                    Health(health: user.getUserDetails().health)),
-            Consumer<UserModel>(
-                builder: (context, user, _) =>
-                    Frowny(frownyCount: user.getUserDetails().frownys)),
+                    Mint(mintCount: user.getUserDetails().mints)),
           ],
           title: Text(_widgetTitles.elementAt(_selectedIndex)),
         ),

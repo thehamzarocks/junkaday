@@ -3,23 +3,36 @@ import 'package:junkaday/user.dart';
 
 class UserModel with ChangeNotifier {
   String _email;
-  int _frownys;
   int _health;
+  int _maxHealth;
+  int _mints;
+  bool _isSpirit;
 
-  void setUserModel(email, frownys, health) {
+  UserModel(email, health, maxHealth, mints, isSpirit) {
     this._email = email;
-    this._frownys = frownys;
     this._health = health;
-    notifyListeners();
+    this._maxHealth = maxHealth;
+    this._mints = mints;
+    this._isSpirit = isSpirit;
   }
 
-  UserModel(this._email, this._frownys, this._health) {
+  void setUserModel(email, health, maxHealth, mints, isSpirit) {
+    this._email = email;
+    this._health = health;
+    this._maxHealth = maxHealth;
+    this._mints = mints;
+    this._isSpirit = isSpirit;
     notifyListeners();
   }
-  
 
   User getUserDetails() {
-    return new User(key: null, email: _email, frownys:_frownys, health:_health);
+    return new User(
+        key: null,
+        email: _email,
+        health: _health,
+        maxHealth: _maxHealth,
+        mints: _mints,
+        isSpirit: _isSpirit);
     // return {
     //   'email': this._email,
     //   'frownys': this._frownys,

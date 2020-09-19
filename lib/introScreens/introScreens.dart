@@ -62,7 +62,7 @@ class IntroScreens extends StatelessWidget {
     AuthService.handleSignIn().then((account) =>
         AuthService.getUserDetails(account.email).then((value) {
           Provider.of<UserModel>(context, listen: false)
-              .setUserModel(value.email, value.frownys, value.health);
+              .setUserModel(value.email, value.health, value.maxHealth, value.mints, value.isSpirit);
           Navigator.push(
               context,
               MaterialPageRoute(

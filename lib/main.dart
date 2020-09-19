@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<UserModel>(
-        create: (_) => UserModel(null, 10, 15),
+        create: (_) => UserModel(null, 10, 15, null, null),
         child: MaterialApp(
             title: 'Junkaday',
             theme: ThemeData(primaryColor: Colors.cyan),
@@ -75,8 +75,11 @@ class _MainAppState extends State<MainApp> {
               SchedulerBinding.instance.addPostFrameCallback((_) {
                 Provider.of<UserModel>(context).setUserModel(
                     snapshot.data.email,
-                    snapshot.data.frownys,
-                    snapshot.data.health);
+                    snapshot.data.health,
+                    snapshot.data.maxHealth,
+                    snapshot.data.mints,
+                    snapshot.data.isSpirit
+                    );
               });
               return MainPage();
             } else if (snapshot.hasError) {

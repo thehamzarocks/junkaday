@@ -26,7 +26,7 @@ class AuthService {
         await http.get('https://vet6qn.deta.dev/users/' + email);
     if (getResponse.statusCode == 200) {
       User userDetails = User.fromJson(json.decode(getResponse.body));
-      UserModel(userDetails.email, userDetails.frownys, userDetails.health);
+      // UserModel(userDetails.email, userDetails.frownys, userDetails.health);
       // userDetailsProvider.setUserModel(
       //     userDetails.email, userDetails.frownys, userDetails.health);
       return userDetails;
@@ -38,7 +38,7 @@ class AuthService {
           body: jsonEncode(<String, String>{'email': email}));
       if (postResponse.statusCode == 200) {
         User userDetails = User.fromJson(json.decode(getResponse.body));
-        UserModel(userDetails.email, userDetails.frownys, userDetails.health);
+        // UserModel(userDetails.email, userDetails.frownys, userDetails.health);
         // userDetailsProvider.setUserModel(
         //     userDetails.email, userDetails.frownys, userDetails.health);
         return userDetails;
