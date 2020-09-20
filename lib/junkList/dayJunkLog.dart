@@ -29,6 +29,19 @@ class DayJunkLog with ChangeNotifier {
     notifyListeners();
   }
 
+  void addSpecificJunkLog(String junkItem) {
+    this.logs.add(SpecificJunkLog(junkItem: junkItem));
+    notifyListeners();
+  }
+
+  void setNoJunkToday() {
+    if (this.logs.length != 0) {
+      return;
+    }
+    this.isNoJunkToday = true;
+    notifyListeners();
+  }
+
   DayJunkLog(
       {this.key,
       this.userEmail,

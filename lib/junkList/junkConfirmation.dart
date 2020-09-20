@@ -12,14 +12,12 @@ import 'package:path_provider/path_provider.dart';
 class JunkConfirmation extends StatelessWidget {
   final String junkItemKey;
   final String junkItemDisplayText;
-  final Function(DayJunkLog) updateJunkLogCallBack;
   final DayJunkLog dayJunkLog;
 
   JunkConfirmation({
     Key key,
     this.junkItemKey,
     this.junkItemDisplayText,
-    this.updateJunkLogCallBack,
     this.dayJunkLog,
   }) : super(key: key);
 
@@ -44,7 +42,8 @@ class JunkConfirmation extends StatelessWidget {
     final path = directory.path;
     final filePath = '$path/$currentDateForFileName';
     File dayJunkLogFile = File(filePath);
-    dayJunkLog.logs.add(SpecificJunkLog(junkItem: junkItemKey));
+    // dayJunkLog.logs.add(SpecificJunkLog(junkItem: junkItemKey));
+    dayJunkLog.addSpecificJunkLog(junkItemKey);
     dayJunkLogFile.writeAsStringSync(dayJunkLog.toString());
     return dayJunkLog;
 
@@ -83,7 +82,6 @@ class JunkConfirmation extends StatelessWidget {
           child: Text('Confirm'),
           onPressed: () {
             updateDayJunkLog(context).then((response) {
-              updateJunkLogCallBack(response);
             });
             Navigator.of(context).pop();
           },

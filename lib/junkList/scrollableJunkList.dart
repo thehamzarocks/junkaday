@@ -53,7 +53,6 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
           return (JunkConfirmation(
               junkItemKey: junkItemKey,
               junkItemDisplayText: junkItemDisplayText,
-              updateJunkLogCallBack: updateJunkList,
               dayJunkLog: widget.dayJunkLog));
         });
   }
@@ -130,9 +129,11 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
     List<MapEntry<String, Map<String, dynamic>>> junkUnitsMapEntryList =
         junkUnitsMap.entries.toList();
     final String email = Provider.of<UserModel>(context).getUserDetails().email;
+    final dayJunkLog = Provider.of<DayJunkLog>(context);
+    updateJunkList(dayJunkLog);
     if (!initialized && email != null) {
       getDayJunkLog(email).then((dayJunkLog) {
-        updateJunkList(dayJunkLog);
+        // updateJunkList(dayJunkLog);
       });
     }
     return (ListView.builder(
