@@ -104,6 +104,9 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
   }
 
   void updateJunkList(DayJunkLog dayJunkLog) {
+    if(dayJunkLog.userEmail == null) {
+      return;
+    }
     if (dayJunkLog == null) {
       return;
     }
