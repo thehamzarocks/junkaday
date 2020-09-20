@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:junkaday/user.dart';
+import 'package:path_provider/path_provider.dart';
 
 class UserModel with ChangeNotifier {
   String _email;
@@ -25,6 +28,16 @@ class UserModel with ChangeNotifier {
     this._mints = mints;
     this._isSpirit = isSpirit;
     this._mileStone = mileStone;
+    notifyListeners();
+  }
+
+  setHealth(int newHealth) async {
+    this._health = newHealth;
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    final filePath = '$path/JunkADayUserDetails';
+    File file = File(filePath);
+    file.writeAsStringSync(this.getUserDetails().toString());
     notifyListeners();
   }
 

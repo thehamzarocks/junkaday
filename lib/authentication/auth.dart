@@ -34,7 +34,28 @@ class AuthService {
     }
   }
 
+  static Future<User> getUserDetailsFromFile() async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    final filePath = '$path/JunkADayUserDetails';
+    if (FileSystemEntity.typeSync(filePath) == FileSystemEntityType.notFound) {
+      return null;
+    }
+    File file = File(filePath);
+    String fileContents = file.readAsStringSync();
+    User userDetailsFromFile = User.fromJson(json.decode(fileContents));
+    return userDetailsFromFile;
+  }
+
+  // TODO: this currently uses the locally stored user data only
+  // Enhance this to sync with server and allow the user to choose
+  // which version to keep in case of conflicts
   static Future<User> getUserDetails(email) async {
+
+    final User userDetails = await getUserDetailsFromFile();
+    if(userDetails != null) {
+      return userDetails;
+    }
     // if the user already exists, get the data
     final getResponse =
         await http.get('https://vet6qn.deta.dev/users/' + email);

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/junkList/dayJunkLog.dart';
 import 'package:junkaday/junkList/specificJunkLog.dart';
+import 'package:junkaday/junkMaster.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -45,6 +46,12 @@ class JunkConfirmation extends StatelessWidget {
     // dayJunkLog.logs.add(SpecificJunkLog(junkItem: junkItemKey));
     dayJunkLog.addSpecificJunkLog(junkItemKey);
     dayJunkLogFile.writeAsStringSync(dayJunkLog.toString());
+
+    // TODO: call the service that handles user stats changes
+    // This will read in the user details and junk logs (even from previous days)
+    // and update the user stats accordingly
+    JunkMaster.onSpecificJunkAdded(Provider.of<UserModel>(context), dayJunkLog);
+
     return dayJunkLog;
 
     // final updateResponse = await http.post(

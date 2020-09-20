@@ -73,14 +73,16 @@ class _MainAppState extends State<MainApp> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               SchedulerBinding.instance.addPostFrameCallback((_) {
-                Provider.of<UserModel>(context).setUserModel(
-                    snapshot.data.email,
-                    snapshot.data.health,
-                    snapshot.data.maxHealth,
-                    snapshot.data.mints,
-                    snapshot.data.isSpirit,
-                    snapshot.data.mileStone
-                    );
+                UserModel userModel = Provider.of<UserModel>(context);
+                if (userModel.getUserDetails().email == null) {
+                  Provider.of<UserModel>(context).setUserModel(
+                      snapshot.data.email,
+                      snapshot.data.health,
+                      snapshot.data.maxHealth,
+                      snapshot.data.mints,
+                      snapshot.data.isSpirit,
+                      snapshot.data.mileStone);
+                }
               });
               return MainPage();
             } else if (snapshot.hasError) {
