@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<UserModel>(
-        create: (_) => UserModel(null, 10, 15, null, null),
+        create: (_) => UserModel(null, 10, 15, null, null, 0),
         child: MaterialApp(
             title: 'Junkaday',
             theme: ThemeData(primaryColor: Colors.cyan),
@@ -78,7 +78,8 @@ class _MainAppState extends State<MainApp> {
                     snapshot.data.health,
                     snapshot.data.maxHealth,
                     snapshot.data.mints,
-                    snapshot.data.isSpirit
+                    snapshot.data.isSpirit,
+                    snapshot.data.mileStone
                     );
               });
               return MainPage();

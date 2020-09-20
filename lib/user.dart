@@ -5,11 +5,12 @@ class User {
   int maxHealth;
   int mints;
   bool isSpirit;
+  int mileStone;
   List<String> rewards;
   List<String> consumables;
   String lastUpdated;
 
-  User({this.key, this.email, this.health, this.maxHealth, this.mints, this.isSpirit});
+  User({this.key, this.email, this.health, this.maxHealth, this.mints, this.isSpirit, this.mileStone});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -18,7 +19,8 @@ class User {
       health: json['health'],
       maxHealth: json['maxHealth'],
       mints: json['mints'],
-      isSpirit: json['isSpirit']
+      isSpirit: json['isSpirit'],
+      mileStone: json['mileStone']
     );
   }
 }

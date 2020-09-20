@@ -19,7 +19,7 @@ class JunkConfirmation extends StatelessWidget {
 
   Future<DayJunkLog> updateDayJunkLog(context) async {
     final String email = Provider.of<UserModel>(context).getUserDetails().email;
-    if(email.isEmpty) {
+    if (email.isEmpty) {
       return null;
     }
     final updateResponse = await http.post(
@@ -27,10 +27,8 @@ class JunkConfirmation extends StatelessWidget {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
-          "user_email": email,
-          "junkItem": junkItemKey
-        }));
+        body: jsonEncode(
+            <String, String>{"user_email": email, "junkItem": junkItemKey}));
     if (updateResponse.statusCode == 200) {
       return DayJunkLog.fromJson(json.decode(updateResponse.body));
     }

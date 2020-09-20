@@ -3,6 +3,7 @@ import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/health.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/junkList/junkList.dart';
+import 'package:junkaday/milestone.dart';
 import 'package:junkaday/mint.dart';
 import 'package:provider/provider.dart';
 
@@ -51,6 +52,9 @@ class _MainPageState extends State<MainPage> {
             Consumer<UserModel>(
                 builder: (context, user, _) =>
                     Mint(mintCount: user.getUserDetails().mints)),
+            Consumer<UserModel>(
+                builder: (context, user, _) =>
+                    MileStone(mileStone: user.getUserDetails().mileStone))
           ],
           title: Text(_widgetTitles.elementAt(_selectedIndex)),
         ),

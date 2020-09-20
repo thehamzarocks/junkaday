@@ -7,21 +7,24 @@ class UserModel with ChangeNotifier {
   int _maxHealth;
   int _mints;
   bool _isSpirit;
+  int _mileStone;
 
-  UserModel(email, health, maxHealth, mints, isSpirit) {
+  UserModel(email, health, maxHealth, mints, isSpirit, mileStone) {
     this._email = email;
     this._health = health;
     this._maxHealth = maxHealth;
     this._mints = mints;
     this._isSpirit = isSpirit;
+    this._mileStone = mileStone;
   }
 
-  void setUserModel(email, health, maxHealth, mints, isSpirit) {
+  void setUserModel(email, health, maxHealth, mints, isSpirit, mileStone) {
     this._email = email;
     this._health = health;
     this._maxHealth = maxHealth;
     this._mints = mints;
     this._isSpirit = isSpirit;
+    this._mileStone = mileStone;
     notifyListeners();
   }
 
@@ -32,7 +35,8 @@ class UserModel with ChangeNotifier {
         health: _health,
         maxHealth: _maxHealth,
         mints: _mints,
-        isSpirit: _isSpirit);
+        isSpirit: _isSpirit,
+        mileStone: _mileStone);
     // return {
     //   'email': this._email,
     //   'frownys': this._frownys,
