@@ -1,37 +1,63 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/junkList/dayJunkLog.dart';
+import 'package:junkaday/junkList/specificJunkLog.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class JunkConfirmation extends StatelessWidget {
   final String junkItemKey;
   final String junkItemDisplayText;
   final Function(DayJunkLog) updateJunkLogCallBack;
+  final DayJunkLog dayJunkLog;
 
-  JunkConfirmation(
-      {Key key,
-      this.junkItemKey,
-      this.junkItemDisplayText,
-      this.updateJunkLogCallBack})
-      : super(key: key);
+  JunkConfirmation({
+    Key key,
+    this.junkItemKey,
+    this.junkItemDisplayText,
+    this.updateJunkLogCallBack,
+    this.dayJunkLog,
+  }) : super(key: key);
+
+  String getCurrentDateForFileName() {
+    var now = DateTime.now();
+    return "junkLog" +
+        "_" +
+        now.year.toString() +
+        "_" +
+        now.month.toString() +
+        "_" +
+        now.day.toString();
+  }
 
   Future<DayJunkLog> updateDayJunkLog(context) async {
     final String email = Provider.of<UserModel>(context).getUserDetails().email;
     if (email.isEmpty) {
       return null;
     }
-    final updateResponse = await http.post(
-        'https://inkfb5.deta.dev/specificJunkLogs',
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-            <String, String>{"user_email": email, "junkItem": junkItemKey}));
-    if (updateResponse.statusCode == 200) {
-      return DayJunkLog.fromJson(json.decode(updateResponse.body));
-    }
+    String currentDateForFileName = getCurrentDateForFileName();
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    final filePath = '$path/$currentDateForFileName';
+    File dayJunkLogFile = File(filePath);
+    dayJunkLog.logs.add(SpecificJunkLog(junkItem: junkItemKey));
+    dayJunkLogFile.writeAsStringSync(dayJunkLog.toString());
+    return dayJunkLog;
+
+    // final updateResponse = await http.post(
+    //     'https://inkfb5.deta.dev/specificJunkLogs',
+    //     headers: <String, String>{
+    //       'Content-Type': 'application/json; charset=UTF-8',
+    //     },
+    //     body: jsonEncode(
+    //         <String, String>{"user_email": email, "junkItem": junkItemKey}));
+    // if (updateResponse.statusCode == 200) {
+    //   return DayJunkLog.fromJson(json.decode(updateResponse.body));
+    // }
   }
 
   @override

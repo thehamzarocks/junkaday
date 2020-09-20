@@ -1,7 +1,9 @@
-import 'package:junkaday/junkList/SpecificJunkLog.dart';
+import 'package:flutter/material.dart';
+import 'package:junkaday/junkList/specificJunkLog.dart';
 import 'package:junkaday/user.dart';
+import "dart:convert";
 
-class DayJunkLog {
+class DayJunkLog with ChangeNotifier {
   String key;
   String userEmail;
   String createdDate;
@@ -9,6 +11,23 @@ class DayJunkLog {
   List<SpecificJunkLog> logs;
   String lastUpdated;
   User updatedUserDetails;
+
+  void setDayJunkLog(
+      {key,
+      userEmail,
+      createdDate,
+      isNoJunkToday,
+      logs,
+      lastUpdated,
+      updatedUserDetails}) {
+    this.key = key;
+    this.userEmail = userEmail;
+    this.createdDate ??= createdDate;
+    this.isNoJunkToday = isNoJunkToday;
+    this.logs = logs;
+    this.lastUpdated = lastUpdated != null ? lastUpdated : this.lastUpdated;
+    notifyListeners();
+  }
 
   DayJunkLog(
       {this.key,
@@ -19,23 +38,50 @@ class DayJunkLog {
       this.lastUpdated,
       this.updatedUserDetails});
 
-  factory DayJunkLog.fromJson(Map<String, dynamic> json) {
-    List<dynamic> dayJunkLogsResponse = json['logs'];
-    List<SpecificJunkLog> dayJunkLogs = dayJunkLogsResponse
-        .map((specificJunkLog) => SpecificJunkLog(
-            userEmail: specificJunkLog["user_email"],
-            junkItem: specificJunkLog["junkItem"],
-            createdTimeStamp: specificJunkLog["createdTimeStamp"]))
-        .toList();
+  factory DayJunkLog.fromJson(Map<String, dynamic> dayJunkLogsJson) {
+    String dayJunkLogsResponseString = dayJunkLogsJson['logs'];
+    List<dynamic> dayJunkLogsResponseJson =
+        json.decode(dayJunkLogsResponseString);
+    List<SpecificJunkLog> dayJunkLogs =
+        dayJunkLogsResponseJson.map((specificJunkLogJson) {
+      Map<String, dynamic> specificJunkLogMap =
+          json.decode(specificJunkLogJson);
+      SpecificJunkLog specificJunkLog = SpecificJunkLog(
+          userEmail: specificJunkLogMap["user_email"],
+          junkItem: specificJunkLogMap["junkItem"],
+          createdTimeStamp: specificJunkLogMap["createdTimeStamp"]);
+      return specificJunkLog;
+    }).toList();
     // List<SpecificJunkLog> dayJunkLogs =  dayJunkLogsResponse
     //     .map((specificJunkLog) => SpecificJunkLog.fromJson(specificJunkLog));
     return DayJunkLog(
-        key: json['key'],
-        userEmail: json['user_email'],
-        createdDate: json['createdDate'],
-        isNoJunkToday: json['isNoJunkToday'],
+        key: dayJunkLogsJson['key'],
+        userEmail: dayJunkLogsJson['user_email'],
+        createdDate: dayJunkLogsJson['createdDate'],
+        isNoJunkToday: dayJunkLogsJson['isNoJunkToday'],
         logs: dayJunkLogs,
-        lastUpdated: json['lastUpdated'],
-        updatedUserDetails: json['updatedUserDetails'] != null ? User.fromJson(json['updatedUserDetails']) : null);
+        lastUpdated: dayJunkLogsJson['lastUpdated'],
+        updatedUserDetails: dayJunkLogsJson['updatedUserDetails'] != null
+            ? User.fromJson(dayJunkLogsJson['updatedUserDetails'])
+            : null);
+  }
+
+  void updateSpecificLog(String junkItem) {
+    this.logs.add(SpecificJunkLog(
+        junkItem: junkItem, userEmail: null, createdTimeStamp: null));
+    notifyListeners();
+  }
+
+  String toString() {
+    List<String> specificJunkLogsList =
+        logs.map((specificJunkLog) => specificJunkLog.toString()).toList();
+    return json.encode({
+      "key": key,
+      "userEmail": userEmail,
+      "createdDate": createdDate,
+      "isNoJunkToday": isNoJunkToday,
+      "logs": json.encode(specificJunkLogsList),
+      "lastUpdated": lastUpdated
+    });
   }
 }

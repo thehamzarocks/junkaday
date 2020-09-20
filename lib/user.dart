@@ -1,3 +1,5 @@
+import "dart:convert";
+
 class User {
   String key;
   String email;
@@ -22,5 +24,17 @@ class User {
       isSpirit: json['isSpirit'],
       mileStone: json['mileStone']
     );
+  }
+
+  String toString() {
+    return json.encode({
+      "key": key,
+      "email": email,
+      "health": health,
+      "maxHealth": maxHealth,
+      "mints": mints,
+      "isSprit": isSpirit,
+      "mileStone": mileStone
+    });
   }
 }

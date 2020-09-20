@@ -1,3 +1,5 @@
+import "dart:convert";
+
 class SpecificJunkLog {
   String userEmail;
   String junkItem;
@@ -11,5 +13,13 @@ class SpecificJunkLog {
       junkItem: json['junkItem'],
       createdTimeStamp: json['createdTimeStamp']
     );
+  }
+
+  String toString() {
+    return json.encode({
+      "userEmail": userEmail,
+      "junkItem": junkItem,
+      "createdTimeStamp": createdTimeStamp
+    });
   }
 }
