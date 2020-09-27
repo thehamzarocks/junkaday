@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:junkaday/junkList/fileUtils.dart';
 import 'package:junkaday/user.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,14 @@ class AuthService {
     final filePath = '$path/JunkADayUserDetails';
     if (FileSystemEntity.typeSync(filePath) == FileSystemEntityType.notFound) {
       File file = File(filePath);
+
+      userDetails.health = 4;
+      userDetails.maxHealth = 4;
+      userDetails.mints = 100;
+      userDetails.isSpirit = false;
+      userDetails.mileStone = 0;
+      userDetails.lastUpdated = DateTime.now().toString();
+      userDetails.createdDate = FileUtils.getDateForFileName(DateTime.now());
       file.writeAsStringSync(userDetails.toString());
     }
   }
@@ -50,20 +59,34 @@ class AuthService {
   // Enhance this to sync with server and allow the user to choose
   // which version to keep in case of conflicts
   static Future<User> getUserDetails(email) async {
-
-    final User userDetails = await getUserDetailsFromFile();
-    if(userDetails != null) {
+    // if the file containing user details is available, use that
+    User userDetails = await getUserDetailsFromFile();
+    if (userDetails != null) {
       return userDetails;
     }
-    // if the user already exists, get the data
+
+    // otherwise we need to create a new file with the starting params
+    // and also update the db with this new user
+    userDetails = new User();
+
+    // if the user already exists, it's ok
     final getResponse =
         await http.get('https://vet6qn.deta.dev/users/' + email);
     if (getResponse.statusCode == 200) {
-      User userDetails = User.fromJson(json.decode(getResponse.body));
-      await storeUserDetails(userDetails);
+      // User userDetails = User.fromJson(json.decode(getResponse.body));
+      // await storeUserDetails(userDetails);
+      await userDetails.setUserDetails(
+          email: email,
+          health: 4,
+          maxHealth: 4,
+          mints: 100,
+          isSpirit: false,
+          mintsWithSpirit: 0,
+          mileStone: 0,
+          createdDate: FileUtils.getDateForFileName(DateTime.now()));
       return userDetails;
     }
-    // otherwise add the user to the db and get the data
+    // otherwise add the user to the db and then proceed
     else {
       final postResponse = await http.post('https://vet6qn.deta.dev/users/',
           headers: <String, String>{
@@ -71,7 +94,18 @@ class AuthService {
           },
           body: jsonEncode(<String, String>{'email': email}));
       if (postResponse.statusCode == 200) {
-        return User.fromJson(json.decode(getResponse.body));
+        // await storeUserDetails(userDetails);
+        await userDetails.setUserDetails(
+            email: email,
+            health: 4,
+            maxHealth: 4,
+            mints: 100,
+            isSpirit: false,
+            mintsWithSpirit: 0,
+            mileStone: 0,
+            createdDate: FileUtils.getDateForFileName(DateTime.now()));
+        return userDetails;
+        // return User.fromJson(json.decode(getResponse.body));
       }
       // if user creation also fails, throw exception
       throw Exception('Failed to get user details');

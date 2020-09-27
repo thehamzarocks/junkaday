@@ -17,19 +17,27 @@ class User with ChangeNotifier {
   List<String> rewards;
   List<String> consumables;
   String lastUpdated;
+  String createdDate;
 
-  User({this.key, this.email, this.health, this.maxHealth, this.mints, this.isSpirit=false, this.mintsWithSpirit, this.mileStone=0});
+  User(
+      {this.key,
+      this.email,
+      this.health,
+      this.maxHealth,
+      this.mints,
+      this.isSpirit = false,
+      this.mintsWithSpirit,
+      this.mileStone = 0});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      key: json['key'],
-      email: json['email'],
-      health: json['health'],
-      maxHealth: json['maxHealth'],
-      mints: json['mints'],
-      isSpirit: json['isSpirit'],
-      mileStone: json['mileStone']
-    );
+        key: json['key'],
+        email: json['email'],
+        health: json['health'],
+        maxHealth: json['maxHealth'],
+        mints: json['mints'],
+        isSpirit: json['isSpirit'],
+        mileStone: json['mileStone']);
   }
   writeUserDetailsToFile() async {
     final Directory directory = await getApplicationDocumentsDirectory();
@@ -40,7 +48,15 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
-  setUserDetails({String email, int health, int maxHealth, int mints, bool isSpirit, int mintsWithSpirit, int mileStone}) async {
+  setUserDetails(
+      {String email,
+      int health,
+      int maxHealth,
+      int mints,
+      bool isSpirit,
+      int mintsWithSpirit,
+      int mileStone,
+      String createdDate}) async {
     this.email = email ?? this.email;
     this.health = health ?? this.health;
     this.maxHealth = maxHealth ?? this.maxHealth;
@@ -49,6 +65,8 @@ class User with ChangeNotifier {
     this.mintsWithSpirit = mintsWithSpirit ?? this.mintsWithSpirit;
     this.mileStone = mileStone ?? this.mileStone;
     this.lastUpdated = DateTime.now().toString();
+    this.createdDate =
+        this.createdDate ?? FileUtils.getDateForFileName(DateTime.now());
     await FileUtils.writeUserDetailsToFile(this);
     notifyListeners();
   }
@@ -64,6 +82,7 @@ class User with ChangeNotifier {
       "mintsWithSpirit": mintsWithSpirit,
       "mileStone": mileStone,
       "lastUpdated": lastUpdated,
+      "createdDate": createdDate
     });
   }
 }

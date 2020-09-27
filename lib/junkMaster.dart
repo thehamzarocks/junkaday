@@ -25,9 +25,9 @@ class JunkMaster {
       if (!isSpirit) {
         mints += 100;
       }
-      // TODO: but this fails for the very first day
+      
       DayJunkLog previousDayLog = await FileUtils.getPreviousDayLog();
-      if (previousDayLog == null) {
+      if (previousDayLog == null && FileUtils.getDateForFileName(DateTime.now()) != user.createdDate) {
         health--;
       }
       if (previousDayLog?.logs != null && previousDayLog.logs.length <= 1) {
@@ -65,6 +65,7 @@ class JunkMaster {
 
     if (mints >= 300) {
       mileStone = 1;
+      mints -= 300;
     }
 
     user.setUserDetails(
@@ -81,6 +82,7 @@ class JunkMaster {
   // TODO: handle udates one logging no junk also
   static onSpecificJunkAdded(User user, DayJunkLog dayJunkLog) async {
     int mileStone = user.mileStone;
+    mileStone = 0;
     switch (mileStone) {
       case 0:
         handleMileStoneZero(user, dayJunkLog);

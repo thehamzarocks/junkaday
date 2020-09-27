@@ -81,7 +81,8 @@ class _MainAppState extends State<MainApp> {
                       mints: snapshot.data.mints,
                       isSpirit: snapshot.data.isSpirit,
                       mintsWithSpirit: snapshot.data.mintsWithSpirit,
-                      mileStone: snapshot.data.mileStone);
+                      mileStone: snapshot.data.mileStone,
+                      createdDate: snapshot.data.createdDate);
                 }
               });
               return MainPage();

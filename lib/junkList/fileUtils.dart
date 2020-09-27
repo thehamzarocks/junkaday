@@ -36,7 +36,7 @@ class FileUtils {
   }
 
   static Future<void> writeUserDetailsToFile(User userDetails) async {
-    File userDetailsFile = await getFile(fileName: "JunkADayUserDetails");
+    File userDetailsFile = await getFileOrCreateNew(fileName: "JunkADayUserDetails");
     
     userDetailsFile.writeAsStringSync(userDetails.toString());
   }
