@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:junkaday/junkList/fileUtils.dart';
 import 'package:junkaday/junkList/specificJunkLog.dart';
 import 'package:junkaday/user.dart';
 import "dart:convert";
@@ -12,7 +13,7 @@ class DayJunkLog with ChangeNotifier {
   String lastUpdated;
   User updatedUserDetails;
 
-  void setDayJunkLog(
+  void updateDayJunkLog(
       {key,
       userEmail,
       createdDate,
@@ -20,12 +21,13 @@ class DayJunkLog with ChangeNotifier {
       logs,
       lastUpdated,
       updatedUserDetails}) {
-    this.key = key;
-    this.userEmail = userEmail;
-    this.createdDate ??= createdDate;
-    this.isNoJunkToday = isNoJunkToday;
-    this.logs = logs;
+    this.key = key ?? this.key;
+    this.userEmail = userEmail ?? this.userEmail;
+    this.createdDate ??= createdDate ?? this.createdDate;
+    this.isNoJunkToday = isNoJunkToday ?? this.isNoJunkToday;
+    this.logs = logs ?? this.logs;
     this.lastUpdated = lastUpdated != null ? lastUpdated : this.lastUpdated;
+    FileUtils.updateCurrentDayJunkLog(this);
     notifyListeners();
   }
 

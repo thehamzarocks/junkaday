@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/health.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/junkList/junkList.dart';
 import 'package:junkaday/milestone.dart';
 import 'package:junkaday/mint.dart';
+import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -37,24 +37,24 @@ class _MainPageState extends State<MainPage> {
     return (Scaffold(
         appBar: AppBar(
           actions: [
-            Consumer<UserModel>(builder: (context, user, _) {
-              if (user.getUserDetails().isSpirit == true) {
+            Consumer<User>(builder: (context, user, _) {
+              if (user.isSpirit == true) {
                 return Icon(Icons.warning_rounded);
               } else {
                 return SizedBox.shrink();
               }
             }),
-            Consumer<UserModel>(
+            Consumer<User>(
                 builder: (context, user, _) => Health(
-                      health: user.getUserDetails().health,
-                      maxHealth: user.getUserDetails().maxHealth,
+                      health: user.health,
+                      maxHealth: user.maxHealth,
                     )),
-            Consumer<UserModel>(
+            Consumer<User>(
                 builder: (context, user, _) =>
-                    Mint(mintCount: user.getUserDetails().mints)),
-            Consumer<UserModel>(
+                    Mint(mintCount: user.mints)),
+            Consumer<User>(
                 builder: (context, user, _) =>
-                    MileStone(mileStone: user.getUserDetails().mileStone))
+                    MileStone(mileStone: user.mileStone))
           ],
           title: Text(_widgetTitles.elementAt(_selectedIndex)),
         ),

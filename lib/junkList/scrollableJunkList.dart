@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/junkList/dayJunkLog.dart';
 import 'package:junkaday/junkList/junkConfirmation.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:junkaday/junkList/specificJunkLog.dart';
+import 'package:junkaday/junkMaster.dart';
+import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -85,13 +86,14 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
     String currentDateForFileName = getCurrentDateForFileName();
     File dayJunkLogFile = await getDayJunkLogFile(currentDateForFileName);
     if (dayJunkLogFile == null) {
-      Provider.of<DayJunkLog>(context).setDayJunkLog(
+      // JunkMaster.onNewDay(Provider.of<UserModel>(context));
+      Provider.of<DayJunkLog>(context).updateDayJunkLog(
           userEmail: email, isNoJunkToday: false, logs: <SpecificJunkLog>[]);
       return null;
     }
     String fileContents = await dayJunkLogFile.readAsString();
     DayJunkLog dayJunkLog = DayJunkLog.fromJson(json.decode(fileContents));
-    Provider.of<DayJunkLog>(context).setDayJunkLog(
+    Provider.of<DayJunkLog>(context).updateDayJunkLog(
         userEmail: email,
         isNoJunkToday: dayJunkLog.isNoJunkToday,
         logs: dayJunkLog.logs);
@@ -131,7 +133,7 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
   Widget build(BuildContext context) {
     List<MapEntry<String, Map<String, dynamic>>> junkUnitsMapEntryList =
         junkUnitsMap.entries.toList();
-    final String email = Provider.of<UserModel>(context).getUserDetails().email;
+    final String email = Provider.of<User>(context).email;
     final dayJunkLog = Provider.of<DayJunkLog>(context);
     updateJunkList(dayJunkLog);
     if (!initialized && email != null) {

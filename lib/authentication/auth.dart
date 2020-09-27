@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/user.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;

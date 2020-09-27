@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/junkList/dayJunkLog.dart';
 import 'package:junkaday/junkList/specificJunkLog.dart';
 import 'package:junkaday/junkMaster.dart';
+import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -34,7 +34,7 @@ class JunkConfirmation extends StatelessWidget {
   }
 
   Future<DayJunkLog> updateDayJunkLog(context) async {
-    final String email = Provider.of<UserModel>(context).getUserDetails().email;
+    final String email = Provider.of<User>(context).email;
     if (email.isEmpty) {
       return null;
     }
@@ -50,7 +50,8 @@ class JunkConfirmation extends StatelessWidget {
     // TODO: call the service that handles user stats changes
     // This will read in the user details and junk logs (even from previous days)
     // and update the user stats accordingly
-    JunkMaster.onSpecificJunkAdded(Provider.of<UserModel>(context), dayJunkLog);
+    await JunkMaster.onSpecificJunkAdded(Provider.of<User>(context), dayJunkLog);
+    // JunkMaster.onNewDay(Provider.of<UserModel>(context));
 
     return dayJunkLog;
 

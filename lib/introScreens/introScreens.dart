@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:junkaday/authentication/auth.dart';
-import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/introScreens/introScreenDetails.dart';
 import 'package:junkaday/mainPage.dart';
+import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
 class IntroScreens extends StatelessWidget {
@@ -61,8 +61,8 @@ class IntroScreens extends StatelessWidget {
   void signInAndNavigate(BuildContext context) {
     AuthService.handleSignIn().then((account) =>
         AuthService.getUserDetails(account.email).then((value) {
-          Provider.of<UserModel>(context, listen: false)
-              .setUserModel(value.email, value.health, value.maxHealth, value.mints, value.isSpirit, value.mileStone);
+          Provider.of<User>(context, listen: false)
+              .setUserDetails(email: value.email, health: value.health, maxHealth: value.maxHealth, mints: value.mints, isSpirit: value.isSpirit, mileStone: value.mileStone);
           Navigator.push(
               context,
               MaterialPageRoute(

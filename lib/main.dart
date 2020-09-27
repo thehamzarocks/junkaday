@@ -9,7 +9,6 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:junkaday/authentication/auth.dart';
-import 'package:junkaday/authentication/userModel.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/mainPage.dart';
 import 'package:junkaday/user.dart';
@@ -20,8 +19,8 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserModel>(
-        create: (_) => UserModel(null, 10, 15, null, null, 0),
+    return ChangeNotifierProvider<User>(
+        create: (_) => User(),
         child: MaterialApp(
             title: 'Junkaday',
             theme: ThemeData(primaryColor: Colors.cyan),
@@ -73,15 +72,16 @@ class _MainAppState extends State<MainApp> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               SchedulerBinding.instance.addPostFrameCallback((_) {
-                UserModel userModel = Provider.of<UserModel>(context);
-                if (userModel.getUserDetails().email == null) {
-                  Provider.of<UserModel>(context).setUserModel(
-                      snapshot.data.email,
-                      snapshot.data.health,
-                      snapshot.data.maxHealth,
-                      snapshot.data.mints,
-                      snapshot.data.isSpirit,
-                      snapshot.data.mileStone);
+                User user = Provider.of<User>(context);
+                if (user.email == null) {
+                  Provider.of<User>(context).setUserDetails(
+                      email: snapshot.data.email,
+                      health: snapshot.data.health,
+                      maxHealth: snapshot.data.maxHealth,
+                      mints: snapshot.data.mints,
+                      isSpirit: snapshot.data.isSpirit,
+                      mintsWithSpirit: snapshot.data.mintsWithSpirit,
+                      mileStone: snapshot.data.mileStone);
                 }
               });
               return MainPage();
