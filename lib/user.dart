@@ -26,7 +26,7 @@ class User with ChangeNotifier {
       this.maxHealth,
       this.mints,
       this.isSpirit = false,
-      this.mintsWithSpirit,
+      this.mintsWithSpirit=0,
       this.mileStone = 0});
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -37,6 +37,7 @@ class User with ChangeNotifier {
         maxHealth: json['maxHealth'],
         mints: json['mints'],
         isSpirit: json['isSpirit'],
+        mintsWithSpirit: json['mintsWithSpirit'],
         mileStone: json['mileStone']);
   }
   writeUserDetailsToFile() async {
@@ -78,7 +79,7 @@ class User with ChangeNotifier {
       "health": health,
       "maxHealth": maxHealth,
       "mints": mints,
-      "isSprit": isSpirit,
+      "isSpirit": isSpirit,
       "mintsWithSpirit": mintsWithSpirit,
       "mileStone": mileStone,
       "lastUpdated": lastUpdated,

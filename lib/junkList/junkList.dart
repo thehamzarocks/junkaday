@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:junkaday/errorAlert.dart';
 import 'package:junkaday/junkList/dayJunkLog.dart';
+import 'package:junkaday/junkList/fileUtils.dart';
 import 'package:junkaday/junkList/junkListHelp.dart';
 import 'package:junkaday/junkList/scrollableJunkList.dart';
 import 'package:junkaday/junkList/specificJunkLog.dart';
@@ -23,18 +24,8 @@ class JunkList extends StatelessWidget {
         now.day.toString();
   }
 
-  updateDayJunkLog(BuildContext context, DayJunkLog dayJunkLog) async {
-    final String email = Provider.of<User>(context).email;
-    if (email.isEmpty) {
-      return null;
-    }
-    String currentDateForFileName = getCurrentDateForFileName();
-    final Directory directory = await getApplicationDocumentsDirectory();
-    final path = directory.path;
-    final filePath = '$path/$currentDateForFileName';
-    File dayJunkLogFile = File(filePath);
-    dayJunkLog.setNoJunkToday();
-    dayJunkLogFile.writeAsStringSync(dayJunkLog.toString());
+  setNoJunkToday(DayJunkLog dayJunkLog) async {
+    dayJunkLog.updateDayJunkLog(isNoJunkToday: true);
     return dayJunkLog;
   }
 
@@ -44,7 +35,11 @@ class JunkList extends StatelessWidget {
       AlertPopup.showAlert(context, "Already logged junk for today");
       return;
     }
-    await updateDayJunkLog(context, dayJunkLog);
+    if (dayJunkLog?.isNoJunkToday == true) {
+      AlertPopup.showAlert(context, "Already marked no junk for today");
+      return;
+    }
+    await setNoJunkToday(dayJunkLog);
 
     // TODO: handle null email and API errors
     // final response = await http
@@ -56,6 +51,16 @@ class JunkList extends StatelessWidget {
     // } else {
     //   AlertPopup.showAlert(context, "Error logging no junk for today");
     // }
+  }
+
+  getNoJunkButtonText(DayJunkLog dayJunkLog) {
+    if (dayJunkLog?.isNoJunkToday == true) {
+      return 'Already Logged No Junk Today!';
+    }
+    if (dayJunkLog?.logs?.length != 0) {
+      return 'Already consumed Junk Today!';
+    }
+    return 'Log No Junk Today!';
   }
 
   @override
@@ -72,9 +77,7 @@ class JunkList extends StatelessWidget {
                   builder: (context, dayJunkLog, _) => RaisedButton(
                       onPressed: () => _logNoJunkToday(context, dayJunkLog),
                       color: Theme.of(context).primaryColor,
-                      child: dayJunkLog?.logs?.length == 0
-                          ? Text('No Junk Today!')
-                          : Text('Already Consumed')))),
+                      child: Text(getNoJunkButtonText(dayJunkLog))))),
           Expanded(
               child: Consumer<DayJunkLog>(
                   builder: (context, dayJunkLog, create) =>

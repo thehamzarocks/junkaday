@@ -21,26 +21,31 @@ class JunkMaster {
     int mileStone = user.mileStone;
 
     // the very first log of the day
-    if (!isNoJunkToday && dayJunkLog?.logs?.length == 1) {
+    if ((isNoJunkToday && dayJunkLog?.logs?.length == 0) ||
+        (!isNoJunkToday && dayJunkLog?.logs?.length == 1)) {
       if (!isSpirit) {
         mints += 100;
       }
-      
+
       DayJunkLog previousDayLog = await FileUtils.getPreviousDayLog();
-      if (previousDayLog == null && FileUtils.getDateForFileName(DateTime.now()) != user.createdDate) {
+      // if you forget to log on a day, you lose health, but only once
+      if (previousDayLog == null &&
+          FileUtils.getDateForFileName(DateTime.now()) != user.createdDate) {
         health--;
       }
+      // if you only logged <=1 units the previous day, you gain 1 health
       if (previousDayLog?.logs != null && previousDayLog.logs.length <= 1) {
         health++;
       }
     }
 
-    // reset the isNoJunkToday if it is true
-    if (isNoJunkToday == true) {
+    // reset the isNoJunkToday to false if any junk is logged
+    if (isNoJunkToday == true && dayJunkLog?.logs?.length == 1) {
       isNoJunkToday = false;
       dayJunkLog.updateDayJunkLog(isNoJunkToday: false);
     }
 
+    // excessive junk consumption causes you to lose health
     if (dayJunkLog?.logs?.length == 3) {
       health--;
     }
@@ -49,6 +54,9 @@ class JunkMaster {
       health = user.maxHealth;
     }
 
+    // if you die, you enter spirit form and respawn at 1 health
+    // all your mints belong to the spirit now
+    // needless to say, if you had mints with a previous spirit, they're lost forever
     if (health <= 0) {
       isSpirit = true;
       mintsWithSpirit = mints;
@@ -56,8 +64,7 @@ class JunkMaster {
       health = 1;
     }
 
-    // hmm looks like we aren't preserving isSpirit in a file
-    if(isSpirit && health >= 3) {
+    if (isSpirit && health >= 3) {
       isSpirit = false;
       mints = mintsWithSpirit;
       mintsWithSpirit = 0;
@@ -74,9 +81,6 @@ class JunkMaster {
         isSpirit: isSpirit,
         mintsWithSpirit: mintsWithSpirit,
         mileStone: mileStone);
-
-    // fetch the previous day's file and if it exists and the logs for that day
-    // are <= 1, increment health by 1
   }
 
   // TODO: handle udates one logging no junk also

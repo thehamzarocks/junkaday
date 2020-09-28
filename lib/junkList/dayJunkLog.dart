@@ -26,7 +26,7 @@ class DayJunkLog with ChangeNotifier {
     this.createdDate ??= createdDate ?? this.createdDate;
     this.isNoJunkToday = isNoJunkToday ?? this.isNoJunkToday;
     this.logs = logs ?? this.logs;
-    this.lastUpdated = lastUpdated != null ? lastUpdated : this.lastUpdated;
+    this.lastUpdated = DateTime.now().toString();
     FileUtils.updateCurrentDayJunkLog(this);
     notifyListeners();
   }
