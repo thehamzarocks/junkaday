@@ -36,8 +36,9 @@ class FileUtils {
   }
 
   static Future<void> writeUserDetailsToFile(User userDetails) async {
-    File userDetailsFile = await getFileOrCreateNew(fileName: "JunkADayUserDetails");
-    
+    File userDetailsFile =
+        await getFileOrCreateNew(fileName: "JunkADayUserDetails");
+
     userDetailsFile.writeAsStringSync(userDetails.toString());
   }
 
@@ -52,12 +53,15 @@ class FileUtils {
     return file;
   }
 
-  static Future<File> getFileOrCreateNew({String fileName}) async{
+  static Future<File> getFileOrCreateNew({String fileName}) async {
     final Directory directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
     final filePath = '$path/$fileName';
     return File(filePath);
-    
-    
+  }
+
+  static Future<FileSystemEntity> deleteAllFiles() async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    return directory.delete(recursive: true);
   }
 }

@@ -4,6 +4,7 @@ import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/junkList/junkList.dart';
 import 'package:junkaday/milestone.dart';
 import 'package:junkaday/mint.dart';
+import 'package:junkaday/testutils.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +19,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     JunkList(),
+    TestUtils(),
     IntroScreens(introScreenNumber: 1),
-    JunkList(),
     JunkList(),
   ];
 

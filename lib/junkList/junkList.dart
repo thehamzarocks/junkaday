@@ -7,6 +7,7 @@ import 'package:junkaday/junkList/fileUtils.dart';
 import 'package:junkaday/junkList/junkListHelp.dart';
 import 'package:junkaday/junkList/scrollableJunkList.dart';
 import 'package:junkaday/junkList/specificJunkLog.dart';
+import 'package:junkaday/junkMaster.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,12 +25,13 @@ class JunkList extends StatelessWidget {
         now.day.toString();
   }
 
-  setNoJunkToday(DayJunkLog dayJunkLog) async {
+  setNoJunkToday(User user, DayJunkLog dayJunkLog) async {
     dayJunkLog.updateDayJunkLog(isNoJunkToday: true);
+    JunkMaster.onSpecificJunkAdded(user, dayJunkLog);
     return dayJunkLog;
   }
 
-  _logNoJunkToday(BuildContext context, DayJunkLog dayJunkLog) async {
+  _logNoJunkToday(BuildContext context, User user, DayJunkLog dayJunkLog) async {
     final String email = Provider.of<User>(context).email;
     if (dayJunkLog?.logs?.length != 0) {
       AlertPopup.showAlert(context, "Already logged junk for today");
@@ -39,7 +41,7 @@ class JunkList extends StatelessWidget {
       AlertPopup.showAlert(context, "Already marked no junk for today");
       return;
     }
-    await setNoJunkToday(dayJunkLog);
+    await setNoJunkToday(user, dayJunkLog);
 
     // TODO: handle null email and API errors
     // final response = await http
@@ -74,10 +76,11 @@ class JunkList extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Consumer<DayJunkLog>(
-                  builder: (context, dayJunkLog, _) => RaisedButton(
-                      onPressed: () => _logNoJunkToday(context, dayJunkLog),
-                      color: Theme.of(context).primaryColor,
-                      child: Text(getNoJunkButtonText(dayJunkLog))))),
+                  builder: (context, dayJunkLog, _) => Consumer<User>(
+                      builder: (context, user, _) => RaisedButton(
+                          onPressed: () => _logNoJunkToday(context, user, dayJunkLog),
+                          color: Theme.of(context).primaryColor,
+                          child: Text(getNoJunkButtonText(dayJunkLog)))))),
           Expanded(
               child: Consumer<DayJunkLog>(
                   builder: (context, dayJunkLog, create) =>

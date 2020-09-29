@@ -25,6 +25,8 @@ class JunkMaster {
         (!isNoJunkToday && dayJunkLog?.logs?.length == 1)) {
       if (!isSpirit) {
         mints += 100;
+      } else if (isSpirit) {
+        mints += 75;
       }
 
       DayJunkLog previousDayLog = await FileUtils.getPreviousDayLog();
@@ -33,8 +35,8 @@ class JunkMaster {
           FileUtils.getDateForFileName(DateTime.now()) != user.createdDate) {
         health--;
       }
-      // if you only logged <=1 units the previous day, you gain 1 health
-      if (previousDayLog?.logs != null && previousDayLog.logs.length <= 1) {
+      // if you only logged <=2 units the previous day, you gain 1 health
+      if (previousDayLog?.logs != null && previousDayLog.logs.length <= 2) {
         health++;
       }
     }
@@ -46,7 +48,7 @@ class JunkMaster {
     }
 
     // excessive junk consumption causes you to lose health
-    if (dayJunkLog?.logs?.length == 3) {
+    if (dayJunkLog?.logs?.length == 3 || dayJunkLog?.logs?.length == 6) {
       health--;
     }
 
@@ -64,9 +66,10 @@ class JunkMaster {
       health = 1;
     }
 
+    // recover your mints from the spirit
     if (isSpirit && health >= 3) {
       isSpirit = false;
-      mints = mintsWithSpirit;
+      mints += mintsWithSpirit;
       mintsWithSpirit = 0;
     }
 
