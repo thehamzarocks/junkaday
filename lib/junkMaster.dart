@@ -78,8 +78,11 @@ class JunkMaster {
       mints -= 300;
     }
 
+    isSpirit = false;
+    health--;
     user.setUserDetails(
         health: health,
+        maxHealth: 40,
         mints: mints,
         isSpirit: isSpirit,
         mintsWithSpirit: mintsWithSpirit,
@@ -95,17 +98,5 @@ class JunkMaster {
         handleMileStoneZero(user, dayJunkLog);
         break;
     }
-    // decrease health when the total units in a day cross a certain threshold
-    // if (true || dayJunkLog?.logs?.length == 39) {
-    //   int health = user.health;
-
-    //   await user.setHealth(1);
-    // }
   }
-
-  // TODO: check if mints have already been updated for today
-  // (is this really called on new days?)
-  // static onNewDay(UserModel userModel) {
-  //   userModel.setMints(userModel.mints + 100);
-  // }
 }

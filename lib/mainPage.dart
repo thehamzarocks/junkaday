@@ -32,6 +32,8 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  final Health health = Health();
+
   // TODO: move consumer to the level of frowny and health
   @override
   Widget build(BuildContext context) {
@@ -45,14 +47,9 @@ class _MainPageState extends State<MainPage> {
                 return SizedBox.shrink();
               }
             }),
+            health,
             Consumer<User>(
-                builder: (context, user, _) => Health(
-                      health: user.health,
-                      maxHealth: user.maxHealth,
-                    )),
-            Consumer<User>(
-                builder: (context, user, _) =>
-                    Mint(mintCount: user.mints)),
+                builder: (context, user, _) => Mint(mintCount: user.mints)),
             Consumer<User>(
                 builder: (context, user, _) =>
                     MileStone(mileStone: user.mileStone))
