@@ -2,21 +2,30 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:junkaday/junkList/mileStonePopup.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
 class MileStone extends StatefulWidget {
-  int mileStones = 0;
+  int mileStones;
   @override
   _MileStoneState createState() => _MileStoneState();
 }
 
 class _MileStoneState extends State<MileStone> {
+  Future<void> _showMileStone({mileStoneNumber: String}) {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return MileStonePopup(mileStoneNumber: mileStoneNumber);
+        });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.mileStones = 0;
   }
 
   @override
@@ -26,21 +35,20 @@ class _MileStoneState extends State<MileStone> {
         Icon(Icons.golf_course_rounded),
         Consumer<User>(builder: (context, user, _) {
           if (user.mileStone != widget.mileStones) {
-            if (widget.mileStones == null) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                setState(() {
-                  widget.mileStones = user.health;
-                });
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              if (widget.mileStones != null) {
+                _showMileStone(mileStoneNumber: user.mileStone);
+              }
+              setState(() {
+                widget.mileStones = user.mileStone;
               });
-              return Text(widget.mileStones.toString());
-            }
-            // show popup for milestone
+            });
           }
           return Text(widget.mileStones.toString());
         })
       ]),
       onPressed: () {
-        setState(() {});
+        _showMileStone(mileStoneNumber: widget.mileStones);
       },
     );
   }

@@ -78,8 +78,6 @@ class JunkMaster {
       mints -= 300;
     }
 
-    isSpirit = false;
-    // health--;
     user.setUserDetails(
         health: health,
         maxHealth: 40,
