@@ -6,9 +6,8 @@ import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
 class Health extends StatefulWidget {
-  int health;
-  int maxHealth;
-  bool isSelected = false;
+  int health = 0;
+  int maxHealth = 0;
   // Health({Key key, this.health, this.maxHealth}) : super(key: key);
 
   @override
@@ -43,15 +42,16 @@ class _HealthState extends State<Health> {
   //   }
   // }
 
-  Color _beginColor;
-  Color _endColor;
+  final Color _beginColor = Colors.black;
+  final Color _healthIncreaseEndColor = Colors.greenAccent;
+  final Color _healthDecreaseEndColor = Colors.redAccent;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _beginColor = Colors.black;
-    _endColor = Colors.yellowAccent;
+    widget.health = 0;
+    widget.maxHealth = 0;
   }
 
   @override
@@ -73,13 +73,14 @@ class _HealthState extends State<Health> {
                   widget.maxHealth.toString());
             }
             return TweenAnimationBuilder(
-                tween: ColorTween(begin: _beginColor, end: _endColor),
+                tween: ColorTween(
+                    begin: _beginColor,
+                    end: user.health > widget.health
+                        ? _healthIncreaseEndColor
+                        : _healthDecreaseEndColor),
                 duration: const Duration(milliseconds: 500),
                 onEnd: () {
-                  Color temp = _beginColor;
                   setState(() {
-                    // _beginColor = _endColor;
-                    // _endColor = temp;
                     widget.health = user.health;
                     widget.maxHealth = user.maxHealth;
                   });
@@ -100,7 +101,6 @@ class _HealthState extends State<Health> {
       ]),
       onPressed: () {
         setState(() {
-          widget.isSelected = !widget.isSelected;
         });
       },
     );

@@ -79,7 +79,7 @@ class JunkMaster {
     }
 
     isSpirit = false;
-    health--;
+    // health--;
     user.setUserDetails(
         health: health,
         maxHealth: 40,

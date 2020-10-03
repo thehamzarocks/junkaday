@@ -22,9 +22,9 @@ class User with ChangeNotifier {
   User(
       {this.key,
       this.email,
-      this.health,
-      this.maxHealth,
-      this.mints,
+      this.health = 0,
+      this.maxHealth = 0,
+      this.mints = 0,
       this.isSpirit = false,
       this.mintsWithSpirit=0,
       this.mileStone = 0});

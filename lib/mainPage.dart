@@ -33,6 +33,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   final Health health = Health();
+  final Mint mint = Mint();
+  final MileStone mileStone = MileStone();
 
   // TODO: move consumer to the level of frowny and health
   @override
@@ -48,11 +50,8 @@ class _MainPageState extends State<MainPage> {
               }
             }),
             health,
-            Consumer<User>(
-                builder: (context, user, _) => Mint(mintCount: user.mints)),
-            Consumer<User>(
-                builder: (context, user, _) =>
-                    MileStone(mileStone: user.mileStone))
+            mint,
+            mileStone
           ],
           title: Text(_widgetTitles.elementAt(_selectedIndex)),
         ),
