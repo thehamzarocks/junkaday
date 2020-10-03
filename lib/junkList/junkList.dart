@@ -1,17 +1,13 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:junkaday/errorAlert.dart';
 import 'package:junkaday/junkList/dayJunkLog.dart';
-import 'package:junkaday/junkList/fileUtils.dart';
 import 'package:junkaday/junkList/junkListHelp.dart';
 import 'package:junkaday/junkList/scrollableJunkList.dart';
-import 'package:junkaday/junkList/specificJunkLog.dart';
 import 'package:junkaday/junkMaster.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
 
 class JunkList extends StatelessWidget {
   getCurrentDateForFileName() {

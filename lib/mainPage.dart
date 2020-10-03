@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:junkaday/aboutScreen.dart';
+import 'package:junkaday/consumables.dart';
 import 'package:junkaday/health/health.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/junkList/junkList.dart';
@@ -20,12 +22,12 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     JunkList(),
-    TestUtils(),
-    IntroScreens(introScreenNumber: 1),
-    JunkList(),
+    // TestUtils(),
+    Consumables(),
+    // IntroScreens(introScreenNumber: 1),
+    AboutScreen(),
+    Consumables(),
   ];
-
-  static List<String> _widgetTitles = ['List', 'Rewards', 'Help', 'Friends'];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -43,12 +45,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return (Scaffold(
         appBar: AppBar(
-          actions: [
-            spirit,
-            health,
-            mint,
-            mileStone
-          ],
+          actions: [spirit, health, mint, mileStone],
         ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
@@ -58,19 +55,19 @@ class _MainPageState extends State<MainPage> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.list_alt_rounded),
-              title: Text('List'),
+              label: 'List',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.cake_rounded),
-              title: Text('Rewards'),
+              label: 'Consumables',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.help_rounded),
-              title: Text('Help'),
+              label: 'Help',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.group_rounded),
-              title: Text('Friends'),
+              label: 'Friends',
             ),
           ],
           currentIndex: _selectedIndex,

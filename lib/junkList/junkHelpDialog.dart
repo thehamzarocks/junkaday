@@ -9,7 +9,7 @@ class JunkHelpDialog extends StatelessWidget {
         child: ListBody(
           children: <Widget>[
             Text(
-                'Pick the item closest to the one you\'ve consumed. Confirm multiple times if you\'ve had multiple units. Or tap the "No Junk Today" button if you aren\'t going to consume any junk today. This can always be overriden by picking an item later. Remember, forgetting to log anything might result in frownys.'),
+                'Pick the item closest to the one you\'ve consumed. Confirm multiple times if you\'ve had multiple units. Or tap the "No Junk Today" button if you aren\'t going to consume any junk today. This can always be overriden by picking an item later. Remember, forgetting to log anything might make you miss out on mints.'),
           ],
         ),
       ),
