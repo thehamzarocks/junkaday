@@ -13,32 +13,30 @@ class IntroScreens extends StatelessWidget {
 
   final Map<int, IntroScreenDetails> introScreenMapping = {
     1: IntroScreenDetails(
-        1, 'Eating Junk? Don\'t be shy about it', Icons.local_pizza_outlined),
-    2: IntroScreenDetails(
-        2, 'Log Units of Junk Consumed, and Earn Quirky Rewards', Icons.cake),
+        1, 'Eating Junk? Embark on an adventure!', Icons.local_pizza_outlined),
+    2: IntroScreenDetails(2,
+        'Log Units of Junk Consumed and journey through Junkland', Icons.cake),
     3: IntroScreenDetails(
-        3,
-        'Check on your Friends, try not to have the most Frownys',
-        Icons.fastfood_outlined),
+        3, 'Oh, and try not to die.', Icons.fastfood_outlined),
     4: IntroScreenDetails(
         4,
         'Welcome to Junk a Day! Enter units of junk every time you consume them',
         Icons.book_online_outlined),
     5: IntroScreenDetails(
         5,
-        'Refer to the Junk List for examples of units. If you don\'t find what you\'re looking for, make reasonable assumptions',
+        'If you don\'t find the item you\'re looking for, make reasonable assumptions',
         Icons.list_outlined),
     6: IntroScreenDetails(
         6,
-        'You\'ll earn frownys based on your habits, try not to have too many frownys',
+        'Your health and mints are determined by your habits. So try to be good! And earn milestones!',
         Icons.branding_watermark_outlined),
     7: IntroScreenDetails(
         7,
-        'Hit the "No Junk Today" button if you\'re not going to have any today. You can always override this by entering units later. Forgetting to log daily will result in frownys',
+        'Hit the "No Junk Today" button if you\'re not going to have any today. You can always override this by entering units later. Don\'t forget to log daily!',
         Icons.not_interested),
     8: IntroScreenDetails(
         8,
-        'That\'s it! Refer the Junk List when in doubt, but try not to worry too much about it! Have fun!',
+        'That\'s it! Obtain milestones while keeping your health up, and have fun!',
         Icons.favorite_outline_outlined),
   };
 
@@ -61,8 +59,13 @@ class IntroScreens extends StatelessWidget {
   void signInAndNavigate(BuildContext context) {
     AuthService.handleSignIn().then((account) =>
         AuthService.getUserDetails(account.email).then((value) {
-          Provider.of<User>(context, listen: false)
-              .setUserDetails(email: value.email, health: value.health, maxHealth: value.maxHealth, mints: value.mints, isSpirit: value.isSpirit, mileStone: value.mileStone);
+          Provider.of<User>(context, listen: false).setUserDetails(
+              email: value.email,
+              health: value.health,
+              maxHealth: value.maxHealth,
+              mints: value.mints,
+              isSpirit: value.isSpirit,
+              mileStone: value.mileStone);
           Navigator.push(
               context,
               MaterialPageRoute(
