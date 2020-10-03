@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:junkaday/junkList/dayJunkLog.dart';
 import 'package:junkaday/junkList/junkConfirmation.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:junkaday/junkList/specificJunkLog.dart';
-import 'package:junkaday/junkMaster.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
@@ -36,10 +34,17 @@ class _ScrollableJunkListState extends State<ScrollableJunkList> {
   bool initialized = false;
 
   Map<String, Map<String, dynamic>> junkUnitsMap = {
+    "burger": {"displayText": "Burger", "dayCount": 0},
+    "cake": {"displayText": "Cake Slice", "dayCount": 0},
     "chips": {"displayText": "Small/Medium Bag of Chips", "dayCount": 0},
-    "chocolateBar": {"displayText": "A Chocolate Bar", "dayCount": 0},
-    "cake": {"displayText": "A Slice of cake", "dayCount": 0},
-    "cookie": {"displayText": "A small pack of cookies", "dayCount": 0},
+    "chocolateBar": {"displayText": "Chocolate Bar", "dayCount": 0},
+    "coke": {"displayText": "Small bottle of Coke", "dayCount": 0},
+    "cookie": {"displayText": "Small pack of cookies", "dayCount": 0},
+    "friedChicken": {"displayText": "Two Pieces of Fried Chicken", "dayCount": 0},
+    "jalebi": {"displayText": "Two Jalebis", "dayCount": 0},
+    "noodles": {"displayText": "Noodle Bowl", "dayCount": 0},
+    "pizza": {"displayText": "Two Slices of Pizza", "dayCount": 0},
+    "samosa": {"displayText": "Two Samosas", "dayCount": 0},
   };
 
   Future<void> _showJunkConfirmationDialog({
