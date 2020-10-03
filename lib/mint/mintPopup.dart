@@ -8,13 +8,14 @@ class MintPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.grey,
       title: Text('Mints: ' + mints.toString()),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Log on a day to gain +100 mints'),
+            Text('Log anything on a day to gain +100 mints'),
             Text('Spirit form reduces mints gained per day to +75'),
-            Text('Acquire 300 mints to reach the next milestone'),
+            Text('Acquire 300 mints to reach the Milestone 1'),
           ],
         ),
       ),

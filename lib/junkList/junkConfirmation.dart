@@ -70,6 +70,7 @@ class JunkConfirmation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.grey,
       title: Text('Confirm Consumption'),
       content: SingleChildScrollView(
         child: ListBody(

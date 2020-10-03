@@ -4,6 +4,7 @@ class JunkHelpDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.grey,
       title: Text('Selecting Junk'),
       content: SingleChildScrollView(
         child: ListBody(

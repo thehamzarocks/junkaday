@@ -7,6 +7,7 @@ class SpiritPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.grey,
       title: Text('Spirit Form'),
       content: SingleChildScrollView(
         child: ListBody(

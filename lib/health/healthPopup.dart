@@ -9,6 +9,7 @@ class HealthPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.grey,
       title:
           Text('Health: ' + health.toString() + ' / ' + maxHealth.toString()),
       content: SingleChildScrollView(

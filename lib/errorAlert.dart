@@ -17,6 +17,7 @@ class AlertPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.grey,
       title: Text('Alert'),
       content: SingleChildScrollView(
         child: ListBody(

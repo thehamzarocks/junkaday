@@ -16,6 +16,7 @@ class MileStonePopup extends StatelessWidget {
           'Wanderer! Many have ventured through this path, though few have found what they sought. Most return here to the very beginning, often in worse shape. Be wary. Step forth, but step true.';
     }
     return AlertDialog(
+      backgroundColor: Colors.grey,
       title: Text('Milestone ' + mileStoneNumber.toString()),
       content: SingleChildScrollView(
         child: ListBody(
