@@ -1,6 +1,5 @@
 import 'package:junkaday/junkList/dayJunkLog.dart';
 import 'package:junkaday/junkList/fileUtils.dart';
-import 'package:junkaday/milestone.dart';
 import 'package:junkaday/user.dart';
 
 class JunkMaster {
@@ -77,7 +76,7 @@ class JunkMaster {
       mileStone = 1;
       mints -= 300;
     }
-
+    
     user.setUserDetails(
         health: health,
         maxHealth: 40,

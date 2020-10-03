@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:junkaday/junkList/mileStonePopup.dart';
+import 'package:junkaday/milestone/mileStonePopup.dart';
+
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 

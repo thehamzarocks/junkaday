@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:junkaday/health.dart';
+import 'package:junkaday/health/health.dart';
 import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/junkList/junkList.dart';
-import 'package:junkaday/milestone.dart';
-import 'package:junkaday/mint.dart';
+import 'package:junkaday/milestone/milestone.dart';
+import 'package:junkaday/mint/mint.dart';
+import 'package:junkaday/spirit/spirit.dart';
 import 'package:junkaday/testutils.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,7 @@ class _MainPageState extends State<MainPage> {
   final Health health = Health();
   final Mint mint = Mint();
   final MileStone mileStone = MileStone();
+  final Spirit spirit = Spirit();
 
   // TODO: move consumer to the level of frowny and health
   @override
@@ -42,18 +44,11 @@ class _MainPageState extends State<MainPage> {
     return (Scaffold(
         appBar: AppBar(
           actions: [
-            Consumer<User>(builder: (context, user, _) {
-              if (user.isSpirit == true) {
-                return Icon(Icons.warning_rounded);
-              } else {
-                return SizedBox.shrink();
-              }
-            }),
+            spirit,
             health,
             mint,
             mileStone
           ],
-          title: Text(_widgetTitles.elementAt(_selectedIndex)),
         ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),

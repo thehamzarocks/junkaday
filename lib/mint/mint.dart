@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:junkaday/mint/mintPopup.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,6 @@ class Mint extends StatefulWidget {
 }
 
 class _MintState extends State<Mint> {
-
   final Color _beginColor = Colors.black;
   final Color _mintIncreaseEndColor = Colors.greenAccent;
   final Color _mintDecreaseEndColor = Colors.redAccent;
@@ -23,6 +23,16 @@ class _MintState extends State<Mint> {
     // TODO: implement initState
     super.initState();
     widget.mints = 0;
+  }
+
+  Future<void> _showMintPopup() {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return MintPopup(
+              mints: widget.mints);
+        });
   }
 
   @override
@@ -54,19 +64,16 @@ class _MintState extends State<Mint> {
                 },
                 curve: Curves.elasticInOut,
                 builder: (_, Color color, __) {
-                  return Text(
-                      widget.mints.toString(),
+                  return Text(widget.mints.toString(),
                       style: TextStyle(color: color));
                 });
           } else {
-            return Text(
-                widget.mints.toString());
+            return Text(widget.mints.toString());
           }
         })
       ]),
       onPressed: () {
-        setState(() {
-        });
+        _showMintPopup();
       },
     );
   }

@@ -2,6 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:junkaday/health/healthPopup.dart';
+import 'package:junkaday/milestone/mileStonePopup.dart';
+import 'package:junkaday/milestone/milestone.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
@@ -15,33 +18,6 @@ class Health extends StatefulWidget {
 }
 
 class _HealthState extends State<Health> {
-  // TextStyle animateStyle() {
-  //   if(widget.health == null) {
-  //     return TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black);
-  //   }
-  //   if(widget.previousHealth == null) {
-  //     setState(() {
-  //       widget.previousHealth = widget.health;
-  //     });
-  //     return TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black);
-  //   }
-  //   if (widget.health > widget.previousHealth) {
-  //     setState(() {
-  //       widget.previousHealth = widget.health;
-  //     });
-  //     return TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.yellowAccent);
-  //   }
-  //   if (widget.health < widget.previousHealth) {
-  //     setState(() {
-  //       widget.previousHealth = widget.health;
-  //     });
-  //     return TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.redAccent);
-  //   }
-  //   if (widget.health == widget.previousHealth) {
-  //     return TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black);
-  //   }
-  // }
-
   final Color _beginColor = Colors.black;
   final Color _healthIncreaseEndColor = Colors.greenAccent;
   final Color _healthDecreaseEndColor = Colors.redAccent;
@@ -52,6 +28,16 @@ class _HealthState extends State<Health> {
     super.initState();
     widget.health = 0;
     widget.maxHealth = 0;
+  }
+
+  Future<void> _showHealthPopup() {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return HealthPopup(
+              health: widget.health, maxHealth: widget.maxHealth);
+        });
   }
 
   @override
@@ -100,8 +86,7 @@ class _HealthState extends State<Health> {
         })
       ]),
       onPressed: () {
-        setState(() {
-        });
+        _showHealthPopup();
       },
     );
   }
