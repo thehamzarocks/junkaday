@@ -79,7 +79,7 @@ class JunkMaster {
     
     user.setUserDetails(
         health: health,
-        maxHealth: 40,
+        maxHealth: 4,
         mints: mints,
         isSpirit: isSpirit,
         mintsWithSpirit: mintsWithSpirit,
@@ -89,7 +89,6 @@ class JunkMaster {
   // TODO: handle udates one logging no junk also
   static onSpecificJunkAdded(User user, DayJunkLog dayJunkLog) async {
     int mileStone = user.mileStone;
-    mileStone = 0;
     switch (mileStone) {
       case 0:
         handleMileStoneZero(user, dayJunkLog);
