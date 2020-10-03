@@ -48,7 +48,7 @@ class IntroScreens extends StatelessWidget {
       nextIntroScreen = introScreenNumber + 1;
     }
 
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => nextIntroScreen == 0

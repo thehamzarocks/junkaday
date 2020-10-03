@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage> {
     JunkList(),
     // TestUtils(),
     Consumables(),
-    // IntroScreens(introScreenNumber: 1),
+    IntroScreens(introScreenNumber: 1),
     AboutScreen(),
     Consumables(),
   ];
@@ -45,6 +45,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return (Scaffold(
         appBar: AppBar(
+          leading: new Container(),
           actions: [spirit, health, mint, mileStone],
         ),
         body: Center(
