@@ -22,8 +22,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     JunkList(),
-    // TestUtils(),
-    Consumables(),
+    TestUtils(),
+    // Consumables(),
     // IntroScreens(introScreenNumber: 1),
     AboutScreen(),
     Consumables(),
