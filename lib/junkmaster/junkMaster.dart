@@ -1,5 +1,7 @@
 import 'package:junkaday/junkList/dayJunkLog.dart';
 import 'package:junkaday/junkList/fileUtils.dart';
+import 'package:junkaday/junkmaster/mileStone0.dart';
+import 'package:junkaday/junkmaster/mileStone1.dart';
 import 'package:junkaday/user.dart';
 
 class Stats {
@@ -31,14 +33,19 @@ class JunkMaster {
   // }
 
   static Future<void> processFirstLogOfDay(
-      Stats stats, DayJunkLog dayJunkLog, String userCreatedDate) async {
+      Stats stats,
+      DayJunkLog dayJunkLog,
+      String userCreatedDate,
+      int normalMintsIncrease,
+      int spiritMintsIncrease) async {
     // the very first log of the day
     if ((stats.isNoJunkToday && dayJunkLog?.logs?.length == 0) ||
         (!stats.isNoJunkToday && dayJunkLog?.logs?.length == 1)) {
       if (!stats.isSpirit) {
-        stats.mints += 100;
+        stats.mints += normalMintsIncrease;
       } else if (stats.isSpirit) {
-        stats.mints += 75;
+        stats.mints += spiritMintsIncrease;
+        ;
       }
 
       DayJunkLog previousDayLog = await FileUtils.getPreviousDayLog();
@@ -99,10 +106,10 @@ class JunkMaster {
     }
   }
 
-  static Future<void> processMileStoneCompletion(Stats stats) async {
-    if (stats.mints >= 300) {
-      stats.mileStone = 1;
-      stats.mints -= 300;
+  static Future<void> processMileStoneCompletion(Stats stats, int requiredMints) async {
+    if (stats.mints >= requiredMints) {
+      stats.mileStone++;
+      stats.mints -= requiredMints;
     }
   }
 
@@ -117,17 +124,7 @@ class JunkMaster {
         mileStone: user.mileStone);
   }
 
-  static void handleMileStoneZero(User user, DayJunkLog dayJunkLog) async {
-
-    Stats stats = getStats(user, dayJunkLog);
-
-    await processFirstLogOfDay(stats, dayJunkLog, user.createdDate);
-    await processNoJunkTodayOverride(stats, dayJunkLog);
-    await processExcessiveJunkConsumption(stats, dayJunkLog);
-    await putHealthInBounds(stats);
-    await processSpirit(stats);
-    await processMileStoneCompletion(stats);
-
+  static void updateUserDetails(User user, Stats stats) {
     user.setUserDetails(
         health: stats.health,
         maxHealth: user.maxHealth,
@@ -135,7 +132,6 @@ class JunkMaster {
         isSpirit: stats.isSpirit,
         mintsWithSpirit: stats.mintsWithSpirit,
         mileStone: stats.mileStone);
-    
   }
 
   static changeOnlyHealth(User user, DayJunkLog dayJunkLog) async {
@@ -206,9 +202,12 @@ class JunkMaster {
     int mileStone = user.mileStone;
     switch (mileStone) {
       case 0:
-        handleMileStoneZero(user, dayJunkLog);
+        MileStone0.handleMileStoneZero(user, dayJunkLog);
         break;
       case 1:
+        MileStone1.handleMileStoneOne(user, dayJunkLog);
+        break;
+      case 2:
         changeOnlyHealth(user, dayJunkLog);
     }
   }
