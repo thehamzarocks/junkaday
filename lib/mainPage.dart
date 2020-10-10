@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage> {
     JunkList(),
     // TestUtils(),
     Consumables(),
-    IntroScreens(introScreenNumber: 1),
+    // IntroScreens(introScreenNumber: 1),
     AboutScreen(),
     Consumables(),
   ];

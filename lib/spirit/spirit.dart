@@ -1,8 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:junkaday/mint/mintPopup.dart';
 import 'package:junkaday/spirit/spiritPopup.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';

@@ -24,7 +24,7 @@ class MileStonePopup extends StatelessWidget {
             Text(mileStoneText, style: GoogleFonts.roboto()),
             mileStoneNumber == 1
                 ? Text(
-                    '(Thank you for trying out the beta, more milestones coming soon. Stats locked until next update!')
+                    '(Thank you for trying out the beta, more milestones coming soon. Your mints won\'t update until the next update, but keep logging and keep your health up!)')
                 : SizedBox.shrink()
           ],
         ),

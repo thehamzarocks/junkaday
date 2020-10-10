@@ -76,7 +76,70 @@ class JunkMaster {
       mileStone = 1;
       mints -= 300;
     }
-    
+
+    user.setUserDetails(
+        health: health,
+        maxHealth: 4,
+        mints: mints,
+        isSpirit: isSpirit,
+        mintsWithSpirit: mintsWithSpirit,
+        mileStone: mileStone);
+  }
+
+  static changeOnlyHealth(User user, DayJunkLog dayJunkLog) async {
+    int health = user.health;
+    int mints = user.mints;
+    bool isSpirit = user.isSpirit;
+    int mintsWithSpirit = user.mintsWithSpirit;
+    bool isNoJunkToday = dayJunkLog.isNoJunkToday;
+    int mileStone = user.mileStone;
+
+    if ((isNoJunkToday && dayJunkLog?.logs?.length == 0) ||
+        (!isNoJunkToday && dayJunkLog?.logs?.length == 1)) {
+      DayJunkLog previousDayLog = await FileUtils.getPreviousDayLog();
+      // if you forget to log on a day, you lose health, but only once
+      if (previousDayLog == null &&
+          FileUtils.getDateForFileName(DateTime.now()) != user.createdDate) {
+        health--;
+      }
+      // if you only logged <=2 units the previous day, you gain 1 health
+      if (previousDayLog?.logs != null && previousDayLog.logs.length <= 2) {
+        health++;
+      }
+    }
+
+    // reset the isNoJunkToday to false if any junk is logged
+    if (isNoJunkToday == true && dayJunkLog?.logs?.length == 1) {
+      isNoJunkToday = false;
+      dayJunkLog.updateDayJunkLog(isNoJunkToday: false);
+    }
+
+    // excessive junk consumption causes you to lose health
+    if (dayJunkLog?.logs?.length == 3 || dayJunkLog?.logs?.length == 6) {
+      health--;
+    }
+
+    if (health >= user.maxHealth) {
+      health = user.maxHealth;
+    }
+
+    // if you die, you enter spirit form and respawn at 1 health
+    // all your mints belong to the spirit now
+    // needless to say, if you had mints with a previous spirit, they're lost forever
+    if (health <= 0) {
+      isSpirit = true;
+      mintsWithSpirit = mints;
+      mints = 0;
+      health = 1;
+    }
+
+    // recover your mints from the spirit
+    if (isSpirit && health >= 3) {
+      isSpirit = false;
+      mints += mintsWithSpirit;
+      mintsWithSpirit = 0;
+    }
+
     user.setUserDetails(
         health: health,
         maxHealth: 4,
@@ -93,6 +156,8 @@ class JunkMaster {
       case 0:
         handleMileStoneZero(user, dayJunkLog);
         break;
+      case 1:
+        changeOnlyHealth(user, dayJunkLog);
     }
   }
 }
