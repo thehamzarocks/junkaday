@@ -22,26 +22,38 @@ class ConsumablesShop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Padding(padding: EdgeInsets.all(30.0), child:Text('Greetings wanderer! Buy my tinkets so you may remain capable of returning to my shop!')),
-      Expanded(child: ListView.builder(
-          padding: EdgeInsets.all(16.0),
-          itemCount: consumablesShopItemList.length * 2,
-          itemBuilder: (context, i) {
-            if (i.isOdd) {
-              return Divider();
-            }
-            final index = i ~/ 2;
-            return ListTile(
-                onTap: () => {},
-                title: Text(consumablesShopItemList[index].name),
-                subtitle: Text(consumablesShopItemList[index].description),
-                isThreeLine: true,
-                // leading: Text(consumablesShopItemList[index].description),
-                trailing: Icon(
-                  Icons.shopping_bag,
-                  color: Colors.green,
-                ));
-          }))
+      Padding(
+          padding: EdgeInsets.all(30.0),
+          child: Text(
+              'Greetings wanderer! Buy my tinkets so you may remain capable of returning to my shop!')),
+      Expanded(
+          child: ListView.builder(
+              padding: EdgeInsets.all(16.0),
+              itemCount: consumablesShopItemList.length * 2,
+              itemBuilder: (context, i) {
+                if (i.isOdd) {
+                  return Divider();
+                }
+                final index = i ~/ 2;
+                return ListTile(
+                    onTap: () => {},
+                    title: Text(consumablesShopItemList[index].name),
+                    subtitle: Text(consumablesShopItemList[index].description),
+                    isThreeLine: true,
+                    // leading: Text(consumablesShopItemList[index].description),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(Icons.miscellaneous_services_outlined),
+                        Text(consumablesShopItemList[index].cost.toString())
+                      ]),
+                      Icon(
+                        Icons.shopping_bag,
+                        color: Colors.green,
+                      )
+                    ]));
+              }))
     ]);
   }
 }
