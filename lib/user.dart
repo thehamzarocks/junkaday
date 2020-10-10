@@ -15,7 +15,7 @@ class User with ChangeNotifier {
   int mintsWithSpirit = 0;
   int mileStone = 0;
   List<String> rewards;
-  List<String> consumables;
+  List<Map<String, dynamic>> consumables;
   String lastUpdated;
   String createdDate;
 
@@ -26,19 +26,34 @@ class User with ChangeNotifier {
       this.maxHealth = 0,
       this.mints = 0,
       this.isSpirit = false,
-      this.mintsWithSpirit=0,
+      this.mintsWithSpirit = 0,
+      this.consumables = const [],
       this.mileStone = 0});
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic> userJson) {
+    List<dynamic> consumablesJson = [];
+    try {
+      consumablesJson = json.decode(userJson['consumables']);
+    } catch (e) {
+      // do nothing, no consumables yet
+    }
+    List<Map<String, dynamic>> consumablesList =
+        consumablesJson.map((specificConsumableJson) {
+      Map<String, dynamic> specificConsumable =
+          json.decode(specificConsumableJson);
+      return specificConsumable;
+    }).toList();
+    // userConsumables;
     return User(
-        key: json['key'],
-        email: json['email'],
-        health: json['health'],
-        maxHealth: json['maxHealth'],
-        mints: json['mints'],
-        isSpirit: json['isSpirit'],
-        mintsWithSpirit: json['mintsWithSpirit'],
-        mileStone: json['mileStone']);
+        key: userJson['key'],
+        email: userJson['email'],
+        health: userJson['health'],
+        maxHealth: userJson['maxHealth'],
+        mints: userJson['mints'],
+        isSpirit: userJson['isSpirit'],
+        mintsWithSpirit: userJson['mintsWithSpirit'],
+        consumables: consumablesList,
+        mileStone: userJson['mileStone']);
   }
   writeUserDetailsToFile() async {
     final Directory directory = await getApplicationDocumentsDirectory();
@@ -56,6 +71,7 @@ class User with ChangeNotifier {
       int mints,
       bool isSpirit,
       int mintsWithSpirit,
+      List<Map<String, dynamic>> consumables,
       int mileStone,
       String createdDate}) async {
     this.email = email ?? this.email;
@@ -64,6 +80,7 @@ class User with ChangeNotifier {
     this.mints = mints ?? this.mints;
     this.isSpirit = isSpirit ?? this.isSpirit;
     this.mintsWithSpirit = mintsWithSpirit ?? this.mintsWithSpirit;
+    this.consumables = consumables ?? this.consumables;
     this.mileStone = mileStone ?? this.mileStone;
     this.lastUpdated = DateTime.now().toString();
     this.createdDate =
@@ -81,6 +98,7 @@ class User with ChangeNotifier {
       "mints": mints,
       "isSpirit": isSpirit,
       "mintsWithSpirit": mintsWithSpirit,
+      "consumables": jsonEncode(consumables),
       "mileStone": mileStone,
       "lastUpdated": lastUpdated,
       "createdDate": createdDate
