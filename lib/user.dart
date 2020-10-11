@@ -97,6 +97,7 @@ class User with ChangeNotifier {
       this.consumables = List();
     }
     this.consumables.add(shopItem.insertedObject);
+    this.mints -= shopItem.cost;
     await FileUtils.writeUserDetailsToFile(this);
     notifyListeners();
   }
