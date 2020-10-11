@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import 'package:flutter/material.dart';
+import 'package:junkaday/consumables/ConsumablesShopItem.dart';
 import 'package:junkaday/junkList/fileUtils.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -37,13 +38,15 @@ class User with ChangeNotifier {
     } catch (e) {
       // do nothing, no consumables yet
     }
-    List<Map<String, dynamic>> consumablesList =
-        consumablesJson.map((specificConsumableJson) {
-      Map<String, dynamic> specificConsumable =
-          json.decode(specificConsumableJson);
-      return specificConsumable;
-    }).toList();
+    // List<Map<String, dynamic>> consumablesList =
+    //     consumablesJson.map((specificConsumableJson) {
+    //   Map<String, dynamic> specificConsumable =
+    //       json.decode(specificConsumableJson);
+    //   return specificConsumable;
+    // }).toList();
     // userConsumables;
+    List<Map<String, dynamic>> consumablesList =
+        consumablesJson.map((e) => Map<String, dynamic>.from(e)).toList();
     return User(
         key: userJson['key'],
         email: userJson['email'],
@@ -85,6 +88,15 @@ class User with ChangeNotifier {
     this.lastUpdated = DateTime.now().toString();
     this.createdDate =
         this.createdDate ?? FileUtils.getDateForFileName(DateTime.now());
+    await FileUtils.writeUserDetailsToFile(this);
+    notifyListeners();
+  }
+
+  addConsumable(ConsumablesShopItem shopItem) async {
+    if (this.consumables.length == 0) {
+      this.consumables = List();
+    }
+    this.consumables.add(shopItem.insertedObject);
     await FileUtils.writeUserDetailsToFile(this);
     notifyListeners();
   }
