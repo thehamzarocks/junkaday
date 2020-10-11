@@ -16,7 +16,7 @@ class User with ChangeNotifier {
   int mintsWithSpirit = 0;
   int mileStone = 0;
   List<String> rewards;
-  List<Map<String, dynamic>> consumables;
+  Map<String, Map<String, dynamic>> consumables;
   String lastUpdated;
   String createdDate;
 
@@ -28,11 +28,11 @@ class User with ChangeNotifier {
       this.mints = 0,
       this.isSpirit = false,
       this.mintsWithSpirit = 0,
-      this.consumables = const [],
+      this.consumables = const {},
       this.mileStone = 0});
 
   factory User.fromJson(Map<String, dynamic> userJson) {
-    List<dynamic> consumablesJson = [];
+    Map<String, dynamic> consumablesJson = {};
     try {
       consumablesJson = json.decode(userJson['consumables']);
     } catch (e) {
@@ -45,8 +45,9 @@ class User with ChangeNotifier {
     //   return specificConsumable;
     // }).toList();
     // userConsumables;
-    List<Map<String, dynamic>> consumablesList =
-        consumablesJson.map((e) => Map<String, dynamic>.from(e)).toList();
+    Map<String, Map<String, dynamic>> consumablesList = consumablesJson
+        .map((key, value) => MapEntry(key, Map<String, dynamic>.from(value)));
+    // consumablesJson.map((e) => Map<String, dynamic>.from(e)).toList();
     return User(
         key: userJson['key'],
         email: userJson['email'],
@@ -74,7 +75,7 @@ class User with ChangeNotifier {
       int mints,
       bool isSpirit,
       int mintsWithSpirit,
-      List<Map<String, dynamic>> consumables,
+      Map<String, Map<String, dynamic>> consumables,
       int mileStone,
       String createdDate}) async {
     this.email = email ?? this.email;
@@ -94,21 +95,21 @@ class User with ChangeNotifier {
 
   addConsumable(ConsumablesShopItem shopItem) async {
     if (this.consumables.length == 0) {
-      this.consumables = List();
+      this.consumables = Map();
     }
-    this.consumables.add(shopItem.insertedObject);
+    this.consumables[shopItem.name] = shopItem.insertedObject;
     this.mints -= shopItem.cost;
     await FileUtils.writeUserDetailsToFile(this);
     notifyListeners();
   }
 
-  destroyConsumable(String consumableName) async {
-    this
-        .consumables
-        .removeWhere((consumable) => consumable['name'] == consumableName);
-    await FileUtils.writeUserDetailsToFile(this);
-    notifyListeners();
-  }
+  // destroyConsumable(String consumableName) async {
+  //   this
+  //       .consumables
+  //       .removeWhere((consumable) => consumable['name'] == consumableName);
+  //   await FileUtils.writeUserDetailsToFile(this);
+  //   notifyListeners();
+  // }
 
   String toString() {
     return json.encode({

@@ -14,11 +14,8 @@ class ConsumablesShopConfirmationPopup extends StatelessWidget {
   }
 
   bool alreadyHasConsumable(BuildContext context) {
-    List<String> userConsumables = Provider.of<User>(context)
-        .consumables
-        .map((e) => e['name'].toString())
-        .toList();
-    return userConsumables.contains(this.shopItem.name);
+    User user = Provider.of<User>(context);
+    return user.consumables.containsKey(this.shopItem.name);
   }
 
   @override
@@ -82,7 +79,7 @@ class ConsumablesShopConfirmationPopup extends StatelessWidget {
             children: <Widget>[
               Text(shopItem.itemStatsDetails),
               Text(
-                  'Ooh, looks like you don\'t have enough mints! Do check back later!'),
+                  'Ooh, looks like you don\'t have enough mints! Do check back when you do.'),
             ],
           ),
         ),

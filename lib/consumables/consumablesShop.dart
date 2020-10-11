@@ -6,8 +6,7 @@ import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
 class ConsumablesShop extends StatelessWidget {
-  final List<ConsumablesShopItem> consumablesShopItemList =
-      consumablesMilestoneMap[1];
+  List<ConsumablesShopItem> consumablesShopItemList;
 
   Future<void> showPurchaseConfirmation(
       BuildContext context, ConsumablesShopItem shopItem) {
@@ -18,15 +17,11 @@ class ConsumablesShop extends StatelessWidget {
   }
 
   Icon getShoppingListIcon(BuildContext context, ConsumablesShopItem shopItem) {
-    List<String> userConsumables = Provider.of<User>(context)
-        .consumables
-        .map((e) => e['name'].toString())
-        .toList();
+    User user = Provider.of<User>(context);
     int userMints = Provider.of<User>(context).mints;
     IconData iconData;
     Color color = Colors.green;
-    String currentItemName = shopItem.name;
-    if (userConsumables.contains(currentItemName)) {
+    if (user.consumables.containsKey(shopItem.name)) {
       iconData = Icons.check;
     } else {
       iconData = Icons.shopping_basket_sharp;
@@ -39,11 +34,14 @@ class ConsumablesShop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int mileStone = Provider.of<User>(context).mileStone ?? 0;
+    consumablesShopItemList = consumablesMilestoneMap[mileStone];
     return Column(children: [
       Padding(
           padding: EdgeInsets.all(30.0),
-          child: Text(
-              'Greetings wanderer! Buy my tinkets so you may remain capable of returning to my shop!')),
+          child: Text(mileStone != 0
+              ? 'Greetings wanderer! Buy my tinkets so you may remain capable of returning to my shop!'
+              : 'Hello wanderer! I\'m setting up shop. Why don\'t you come back a bit later?')),
       Expanded(
           child: ListView.builder(
               padding: EdgeInsets.all(16.0),

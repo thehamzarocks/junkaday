@@ -11,7 +11,7 @@ class Stats {
   bool isSpirit;
   int mintsWithSpirit;
   bool isNoJunkToday;
-  List<Map<String, dynamic>> consumables;
+  Map<String, Map<String, dynamic>> consumables;
   int mileStone;
 
   Stats(
@@ -96,6 +96,7 @@ class JunkMaster {
     if (stats.health <= 0) {
       stats.isSpirit = true;
       stats.mintsWithSpirit = stats.mints;
+      stats.consumables = new Map();
       stats.mints = 0;
       stats.health = 1;
     }
@@ -123,6 +124,7 @@ class JunkMaster {
         isSpirit: user.isSpirit,
         mintsWithSpirit: user.mintsWithSpirit,
         isNoJunkToday: dayJunkLog.isNoJunkToday,
+        consumables: user.consumables,
         mileStone: user.mileStone);
   }
 
