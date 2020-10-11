@@ -11,6 +11,7 @@ class Stats {
   bool isSpirit;
   int mintsWithSpirit;
   bool isNoJunkToday;
+  List<Map<String, dynamic>> consumables;
   int mileStone;
 
   Stats(
@@ -20,6 +21,7 @@ class Stats {
       this.isSpirit,
       this.mintsWithSpirit,
       this.isNoJunkToday,
+      this.consumables,
       this.mileStone});
 }
 

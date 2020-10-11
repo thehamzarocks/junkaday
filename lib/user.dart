@@ -102,6 +102,14 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
+  destroyConsumable(String consumableName) async {
+    this
+        .consumables
+        .removeWhere((consumable) => consumable['name'] == consumableName);
+    await FileUtils.writeUserDetailsToFile(this);
+    notifyListeners();
+  }
+
   String toString() {
     return json.encode({
       "key": key,

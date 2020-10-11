@@ -16,6 +16,6 @@ final Map<int, List<ConsumablesShopItem>> consumablesMilestoneMap = {
             'Wanderers often like to stray from the beaten path. This trinket keeps such fools alive when they do.',
         itemStatsDetails: 'Keeps you from losing any health today.',
         cost: 300,
-        insertedObject: {"name": 'Invincibility'}),
+        insertedObject: {"name": 'Invincibility', "activated": false}),
   ],
 };
