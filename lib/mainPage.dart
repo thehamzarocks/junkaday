@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:junkaday/aboutScreen.dart';
-import 'package:junkaday/consumables.dart';
+import 'package:junkaday/consumables/consumablesShop.dart';
 import 'package:junkaday/health/health.dart';
-import 'package:junkaday/introScreens/introScreens.dart';
 import 'package:junkaday/junkList/junkList.dart';
 import 'package:junkaday/milestone/milestone.dart';
 import 'package:junkaday/mint/mint.dart';
 import 'package:junkaday/spirit/spirit.dart';
 import 'package:junkaday/testutils.dart';
-import 'package:junkaday/user.dart';
-import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -22,11 +19,10 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     JunkList(),
-    // TestUtils(),
-    Consumables(),
+    ConsumablesShop(),
+    TestUtils(),
     // IntroScreens(introScreenNumber: 1),
     AboutScreen(),
-    Consumables(),
   ];
 
   void _onItemTapped(int index) {

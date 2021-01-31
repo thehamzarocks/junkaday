@@ -1,11 +1,9 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:junkaday/errorAlert.dart';
 import 'package:junkaday/junkList/dayJunkLog.dart';
 import 'package:junkaday/junkList/junkListHelp.dart';
 import 'package:junkaday/junkList/scrollableJunkList.dart';
-import 'package:junkaday/junkMaster.dart';
+import 'package:junkaday/junkMaster/junkMaster.dart';
 import 'package:junkaday/user.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +25,8 @@ class JunkList extends StatelessWidget {
     return dayJunkLog;
   }
 
-  _logNoJunkToday(BuildContext context, User user, DayJunkLog dayJunkLog) async {
+  _logNoJunkToday(
+      BuildContext context, User user, DayJunkLog dayJunkLog) async {
     final String email = Provider.of<User>(context).email;
     if (dayJunkLog?.logs?.length != 0) {
       AlertPopup.showAlert(context, "Already logged junk for today");
@@ -74,7 +73,8 @@ class JunkList extends StatelessWidget {
               child: Consumer<DayJunkLog>(
                   builder: (context, dayJunkLog, _) => Consumer<User>(
                       builder: (context, user, _) => RaisedButton(
-                          onPressed: () => _logNoJunkToday(context, user, dayJunkLog),
+                          onPressed: () =>
+                              _logNoJunkToday(context, user, dayJunkLog),
                           color: Theme.of(context).primaryColor,
                           child: Text(getNoJunkButtonText(dayJunkLog)))))),
           Expanded(

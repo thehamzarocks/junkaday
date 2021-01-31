@@ -81,6 +81,7 @@ class _MainAppState extends State<MainApp> {
                       mints: snapshot.data.mints,
                       isSpirit: snapshot.data.isSpirit,
                       mintsWithSpirit: snapshot.data.mintsWithSpirit,
+                      consumables: snapshot.data.consumables,
                       mileStone: snapshot.data.mileStone,
                       createdDate: snapshot.data.createdDate);
                 }

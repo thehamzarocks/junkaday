@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:junkaday/milestone/mileStoneTextMap.dart';
 
 class MileStonePopup extends StatelessWidget {
   final int mileStoneNumber;
@@ -8,7 +9,13 @@ class MileStonePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String mileStoneText = '';
+    String mileStoneText = mileStoneNumber == 0
+        ? ''
+        : mileStoneTextMap[mileStoneNumber]['mainText'];
+    String additionalInfo = mileStoneNumber == 0
+        ? ''
+        : mileStoneTextMap[mileStoneNumber]['additionalInfo'];
+
     if (mileStoneNumber == 0) {
       mileStoneText = 'Is there a ... a wanderer?';
     } else if (mileStoneNumber == 1) {
@@ -22,10 +29,7 @@ class MileStonePopup extends StatelessWidget {
         child: ListBody(
           children: <Widget>[
             Text(mileStoneText, style: GoogleFonts.roboto()),
-            mileStoneNumber == 1
-                ? Text(
-                    '(Thank you for trying out the beta, more milestones coming soon. Your mints won\'t update until the next update, but keep logging and keep your health up!)')
-                : SizedBox.shrink()
+            Text(additionalInfo),
           ],
         ),
       ),

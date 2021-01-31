@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import 'package:flutter/material.dart';
+import 'package:junkaday/consumables/ConsumablesShopItem.dart';
 import 'package:junkaday/junkList/fileUtils.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -15,7 +16,7 @@ class User with ChangeNotifier {
   int mintsWithSpirit = 0;
   int mileStone = 0;
   List<String> rewards;
-  List<String> consumables;
+  Map<String, Map<String, dynamic>> consumables;
   String lastUpdated;
   String createdDate;
 
@@ -26,19 +27,37 @@ class User with ChangeNotifier {
       this.maxHealth = 0,
       this.mints = 0,
       this.isSpirit = false,
-      this.mintsWithSpirit=0,
+      this.mintsWithSpirit = 0,
+      this.consumables = const {},
       this.mileStone = 0});
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic> userJson) {
+    Map<String, dynamic> consumablesJson = {};
+    try {
+      consumablesJson = json.decode(userJson['consumables']);
+    } catch (e) {
+      // do nothing, no consumables yet
+    }
+    // List<Map<String, dynamic>> consumablesList =
+    //     consumablesJson.map((specificConsumableJson) {
+    //   Map<String, dynamic> specificConsumable =
+    //       json.decode(specificConsumableJson);
+    //   return specificConsumable;
+    // }).toList();
+    // userConsumables;
+    Map<String, Map<String, dynamic>> consumablesList = consumablesJson
+        .map((key, value) => MapEntry(key, Map<String, dynamic>.from(value)));
+    // consumablesJson.map((e) => Map<String, dynamic>.from(e)).toList();
     return User(
-        key: json['key'],
-        email: json['email'],
-        health: json['health'],
-        maxHealth: json['maxHealth'],
-        mints: json['mints'],
-        isSpirit: json['isSpirit'],
-        mintsWithSpirit: json['mintsWithSpirit'],
-        mileStone: json['mileStone']);
+        key: userJson['key'],
+        email: userJson['email'],
+        health: userJson['health'],
+        maxHealth: userJson['maxHealth'],
+        mints: userJson['mints'],
+        isSpirit: userJson['isSpirit'],
+        mintsWithSpirit: userJson['mintsWithSpirit'],
+        consumables: consumablesList,
+        mileStone: userJson['mileStone']);
   }
   writeUserDetailsToFile() async {
     final Directory directory = await getApplicationDocumentsDirectory();
@@ -56,6 +75,7 @@ class User with ChangeNotifier {
       int mints,
       bool isSpirit,
       int mintsWithSpirit,
+      Map<String, Map<String, dynamic>> consumables,
       int mileStone,
       String createdDate}) async {
     this.email = email ?? this.email;
@@ -64,6 +84,7 @@ class User with ChangeNotifier {
     this.mints = mints ?? this.mints;
     this.isSpirit = isSpirit ?? this.isSpirit;
     this.mintsWithSpirit = mintsWithSpirit ?? this.mintsWithSpirit;
+    this.consumables = consumables ?? this.consumables;
     this.mileStone = mileStone ?? this.mileStone;
     this.lastUpdated = DateTime.now().toString();
     this.createdDate =
@@ -71,6 +92,24 @@ class User with ChangeNotifier {
     await FileUtils.writeUserDetailsToFile(this);
     notifyListeners();
   }
+
+  addConsumable(ConsumablesShopItem shopItem) async {
+    if (this.consumables.length == 0) {
+      this.consumables = Map();
+    }
+    this.consumables[shopItem.name] = shopItem.insertedObject;
+    this.mints -= shopItem.cost;
+    await FileUtils.writeUserDetailsToFile(this);
+    notifyListeners();
+  }
+
+  // destroyConsumable(String consumableName) async {
+  //   this
+  //       .consumables
+  //       .removeWhere((consumable) => consumable['name'] == consumableName);
+  //   await FileUtils.writeUserDetailsToFile(this);
+  //   notifyListeners();
+  // }
 
   String toString() {
     return json.encode({
@@ -81,6 +120,7 @@ class User with ChangeNotifier {
       "mints": mints,
       "isSpirit": isSpirit,
       "mintsWithSpirit": mintsWithSpirit,
+      "consumables": jsonEncode(consumables),
       "mileStone": mileStone,
       "lastUpdated": lastUpdated,
       "createdDate": createdDate
